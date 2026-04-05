@@ -1,0 +1,6 @@
+node_modules/
+dist/
+claude-code-source/
+specs-draft.md
+.DS_Store
+*.tsbuildinfo

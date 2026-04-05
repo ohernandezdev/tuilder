@@ -1,0 +1,690 @@
+import { type Lesson } from '../../types.js';
+import { type Locale } from '../../i18n/types.js';
+
+interface LessonText {
+  title: string;
+  module: string;
+  concept: string;
+  analogy?: string;
+  why: string;
+  task: string;
+  hint?: string;
+  simulateLines?: string[];
+  simulateDelay?: number;
+}
+
+const msg = {
+  es: {
+    '2.3': {
+      ok: 'Ya sabes preguntar qu\u00e9 cambi\u00f3.',
+      failNoSpace: 'Necesitas un espacio entre git y status',
+      failMissing: 'Falta la palabra git al inicio. Escribe: git status',
+      fail: 'Escribe git status (con espacio)',
+    },
+    '2.4': { ok: 'Ya puedes ver el historial.', fail: 'Escribe git log (con espacio)' },
+    '2.5': { ok: 'Ya sabes ver tus ramas.', fail: 'Escribe git branch (con espacio)' },
+    '2.6': { ok: 'Nunca apruebes sin ver el diff.', fail: 'Escribe git diff (con espacio)' },
+    '2.7': {
+      ok: 'Rama creada.',
+      failMissing: 'Falta -b y el nombre. Escribe: git checkout -b mi-cambio',
+      fail: 'Escribe git checkout -b mi-cambio',
+    },
+    '2.8': {
+      ok: 'Archivos listos para guardar.',
+      failMissing: 'Falta el punto al final. Escribe: git add .',
+      fail: 'Escribe git add . (con punto al final)',
+    },
+    '2.9': {
+      ok: 'Proyecto clonado.',
+      failMissing: 'Falta el URL. Escribe: git clone https://github.com/equipo/proyecto.git',
+      fail: 'Escribe git clone seguido del URL',
+    },
+    '2.10': { ok: 'Flujo dominado.', fail: 'Escribe git status' },
+  },
+  en: {
+    '2.3': {
+      ok: 'Now you know how to ask what changed.',
+      failNoSpace: 'You need a space between git and status',
+      failMissing: 'Missing the word git at the start. Type: git status',
+      fail: 'Type git status (with a space)',
+    },
+    '2.4': { ok: 'Now you can see the history.', fail: 'Type git log (with a space)' },
+    '2.5': { ok: 'Now you know how to see your branches.', fail: 'Type git branch (with a space)' },
+    '2.6': { ok: 'Never approve without seeing the diff.', fail: 'Type git diff (with a space)' },
+    '2.7': {
+      ok: 'Branch created.',
+      failMissing: 'Missing -b and the name. Type: git checkout -b mi-cambio',
+      fail: 'Type git checkout -b mi-cambio',
+    },
+    '2.8': {
+      ok: 'Files ready to save.',
+      failMissing: 'Missing the dot at the end. Type: git add .',
+      fail: 'Type git add . (with a dot at the end)',
+    },
+    '2.9': {
+      ok: 'Project cloned.',
+      failMissing: 'Missing the URL. Type: git clone https://github.com/equipo/proyecto.git',
+      fail: 'Type git clone followed by the URL',
+    },
+    '2.10': { ok: 'Flow mastered.', fail: 'Type git status' },
+  },
+  fr: {
+    '2.3': {
+      ok: 'Maintenant tu sais demander ce qui a chang\u00e9.',
+      failNoSpace: 'Il faut un espace entre git et status',
+      failMissing: 'Il manque le mot git au d\u00e9but. Tape : git status',
+      fail: 'Tape git status (avec un espace)',
+    },
+    '2.4': { ok: 'Maintenant tu peux voir l\u2019historique.', fail: 'Tape git log (avec un espace)' },
+    '2.5': { ok: 'Maintenant tu sais voir tes branches.', fail: 'Tape git branch (avec un espace)' },
+    '2.6': { ok: 'N\u2019approuve jamais sans voir le diff.', fail: 'Tape git diff (avec un espace)' },
+    '2.7': {
+      ok: 'Branche cr\u00e9\u00e9e.',
+      failMissing: 'Il manque -b et le nom. Tape : git checkout -b mi-cambio',
+      fail: 'Tape git checkout -b mi-cambio',
+    },
+    '2.8': {
+      ok: 'Fichiers pr\u00eats \u00e0 sauvegarder.',
+      failMissing: 'Il manque le point \u00e0 la fin. Tape : git add .',
+      fail: 'Tape git add . (avec un point \u00e0 la fin)',
+    },
+    '2.9': {
+      ok: 'Projet clon\u00e9.',
+      failMissing: 'Il manque l\u2019URL. Tape : git clone https://github.com/equipo/proyecto.git',
+      fail: 'Tape git clone suivi de l\u2019URL',
+    },
+    '2.10': { ok: 'Flux ma\u00eetris\u00e9.', fail: 'Tape git status' },
+  },
+} as const;
+
+const content: Record<Locale, Record<string, LessonText>> = {
+  es: {
+    '2.1': {
+      title: 'Qu\u00e9 es Git',
+      module: 'Git para Humanos',
+      concept: 'Git es un sistema que guarda el historial de cambios de un proyecto. Cada vez que alguien hace un cambio y lo "guarda" en Git, queda registrado para siempre.\n\nEs como un Google Docs pero mucho m\u00e1s potente: puedes ver qui\u00e9n cambi\u00f3 qu\u00e9, cu\u00e1ndo, y por qu\u00e9. Y puedes volver atr\u00e1s a cualquier momento.',
+      analogy: 'Imagina que escribes un documento y cada vez que guardas, se crea una foto instant\u00e1nea de TODO el proyecto. Git es esa c\u00e1mara. Puedes volver a ver cualquier foto del pasado.',
+      why: 'Los agentes de AI usan Git para guardar los cambios que hacen. Si no entiendes Git, no vas a saber qu\u00e9 cambi\u00f3 ni c\u00f3mo volver atr\u00e1s.',
+      task: 'Presiona Enter para continuar',
+    },
+    '2.2': {
+      title: 'Qu\u00e9 es un repositorio',
+      module: 'Git para Humanos',
+      concept: 'Un repositorio (o "repo") es una carpeta que tiene Git activado. Es la carpeta de tu proyecto + todo su historial de cambios.\n\nCuando alguien te dice "clona el repo", te est\u00e1 diciendo "baja una copia del proyecto con todo su historial".',
+      analogy: 'Un repo es como un Google Drive compartido, pero con superpoderes: historial infinito, ramas paralelas, y funciona sin internet.',
+      why: 'Todo proyecto donde vas a usar agentes de AI vive en un repo. Es el contenedor de todo.',
+      task: 'Presiona Enter para continuar',
+    },
+    '2.3': {
+      title: 'git status \u2014 La pregunta m\u00e1s importante',
+      module: 'Git para Humanos',
+      concept: 'git status es el comando que m\u00e1s vas a usar. Te dice:\n\n  - Qu\u00e9 archivos cambiaron\n  - Qu\u00e9 archivos son nuevos\n  - Qu\u00e9 est\u00e1 listo para guardarse\n  - En qu\u00e9 rama est\u00e1s',
+      analogy: 'Es el panel de control de tu auto: te dice el estado de todo de un vistazo.',
+      why: 'SIEMPRE ejecuta git status antes de hacer cualquier cosa. Es la primera pregunta que debes hacerle al proyecto.',
+      task: 'Escribe git status',
+      hint: 'Escribe git, espacio, status. Luego Enter \u21b5',
+      simulateLines: [
+        'On branch main',
+        'Changes not staged for commit:',
+        '  modified:   src/app.tsx',
+        '',
+        'Untracked files:',
+        '  src/components/Header.tsx',
+      ],
+      simulateDelay: 200,
+    },
+    '2.4': {
+      title: 'git log \u2014 Qu\u00e9 pas\u00f3 antes que yo',
+      module: 'Git para Humanos',
+      concept: 'git log te muestra el historial de cambios. Cada entrada tiene qui\u00e9n hizo el cambio, cu\u00e1ndo, y un mensaje describiendo qu\u00e9 cambi\u00f3.\n\nEs como leer el registro de actividad de un documento compartido.',
+      why: 'Cuando llegas a un proyecto, git log te da contexto. Puedes ver qu\u00e9 se hizo recientemente y por qu\u00e9.',
+      task: 'Escribe git log',
+      hint: 'Escribe git, espacio, log. Luego Enter \u21b5',
+      simulateLines: [
+        'a3f2b1c fix: corregir color del boton de login',
+        '8d4e5f7 feat: agregar pagina de perfil',
+        'c1a9d3e refactor: extraer componente Header',
+      ],
+      simulateDelay: 200,
+    },
+    '2.5': {
+      title: 'git branch \u2014 En qu\u00e9 universo estoy',
+      module: 'Git para Humanos',
+      concept: 'Las ramas (branches) son versiones paralelas del proyecto. La rama principal se llama "main".\n\nCuando quieres hacer cambios sin afectar lo que funciona, creas una rama nueva. Es como hacer una copia del documento para experimentar sin miedo.',
+      analogy: 'main es el documento oficial. Una rama es una copia donde puedes editar libremente. Si te gusta, lo fusionas. Si no, lo descartas.',
+      why: 'Los agentes de AI SIEMPRE deber\u00edan trabajar en una rama separada, nunca directo en main.',
+      task: 'Escribe git branch',
+      hint: 'Escribe git, espacio, branch. Luego Enter \u21b5',
+      simulateLines: [
+        '* main',
+        '  feature/nueva-pagina',
+        '  fix/color-boton',
+      ],
+      simulateDelay: 200,
+    },
+    '2.6': {
+      title: 'git diff \u2014 Ver exactamente qu\u00e9 cambi\u00f3',
+      module: 'Git para Humanos',
+      concept: 'git diff te muestra los cambios exactos en los archivos. L\u00edneas verdes = agregadas. L\u00edneas rojas = quitadas.\n\nNunca apruebes un cambio de un agente de AI sin ver el diff primero. Es tu protecci\u00f3n.\n\nEn un diff: las l\u00edneas con - (rojo) se eliminaron. Las l\u00edneas con + (verde) se agregaron.',
+      why: 'El diff es tu escudo. Te muestra exactamente qu\u00e9 se modific\u00f3, l\u00ednea por l\u00ednea. Si algo se ve raro, lo paras.',
+      task: 'Escribe git diff',
+      hint: 'Escribe git, espacio, diff. Luego Enter \u21b5',
+      simulateLines: [
+        'diff --git a/src/app.tsx b/src/app.tsx',
+        '--- a/src/app.tsx',
+        '+++ b/src/app.tsx',
+        '@@ -12,7 +12,7 @@',
+        '-  backgroundColor: "blue",',
+        '+  backgroundColor: "red",',
+      ],
+      simulateDelay: 200,
+    },
+    '2.7': {
+      title: 'Crear una rama nueva',
+      module: 'Git para Humanos',
+      concept: 'Antes de hacer cambios, crea una rama nueva:\n\n  git checkout -b nombre-de-tu-rama\n\nEl -b significa "branch nueva". El nombre puede ser descriptivo de lo que vas a hacer.',
+      why: 'REGLA DE ORO: nunca trabajes directo en main. Siempre crea una rama. Si algo sale mal, main sigue intacto.',
+      task: 'Escribe git checkout -b mi-cambio',
+      hint: 'Escribe: git checkout -b mi-cambio (tal cual). Luego Enter \u21b5',
+      simulateLines: [
+        'Switched to a new branch \'mi-cambio\'',
+      ],
+      simulateDelay: 200,
+    },
+    '2.8': {
+      title: 'Guardar cambios \u2014 add y commit',
+      module: 'Git para Humanos',
+      concept: 'Guardar en Git tiene dos pasos:\n\n  1. git add .  \u2014 seleccionar qu\u00e9 guardar (el punto = todo)\n  2. git commit -m "mensaje"  \u2014 guardar con descripci\u00f3n\n\nEl mensaje del commit describe QU\u00c9 hiciste y POR QU\u00c9. Es importante.\n\n\u00bfPor qu\u00e9 dos pasos? Porque a veces editas 5 archivos pero solo quieres guardar 2. "add" selecciona cu\u00e1les incluir. "commit" los guarda juntos.\n\nEn Git, "guardar" se llama "commit". No hay Ctrl+S \u2014 todo se guarda con git commit.\n\nLos c\u00f3digos como abc1234 son identificadores \u00fanicos de Git. No necesitas memorizarlos.',
+      analogy: 'git add es poner cosas en una caja. git commit es cerrar la caja y ponerle etiqueta.',
+      why: 'Cuando un agente de AI hace cambios, t\u00fa decides cu\u00e1ndo guardarlos. Un buen mensaje ayuda a tu equipo a entender qu\u00e9 pas\u00f3.',
+      task: 'Escribe git add .',
+      hint: 'Escribe git, espacio, add, espacio, punto. Luego Enter \u21b5',
+      simulateLines: [
+        '  $',
+      ],
+      simulateDelay: 150,
+    },
+    '2.9': {
+      title: 'git clone \u2014 Bajar un proyecto',
+      module: 'Git para Humanos',
+      concept: 'Cuando necesitas trabajar con un proyecto existente, lo "clonas". git clone baja una copia completa con todo su historial.\n\nTu equipo te da un link del repositorio. T\u00fa lo clonas y listo.',
+      why: 'La primera vez que trabajas con el c\u00f3digo de tu equipo, necesitas clonarlo. Es el primer paso.',
+      task: 'Escribe git clone seguido de un URL',
+      hint: 'Escribe: git clone https://github.com/equipo/proyecto.git y Enter \u21b5',
+      simulateLines: [
+        'Cloning into \'proyecto\'...',
+        'remote: Enumerating objects: 47, done.',
+        'remote: Counting objects: 100% (47/47), done.',
+        'remote: Compressing objects: 100% (32/32), done.',
+        'Receiving objects: 100% (47/47), 12.34 KiB | 6.17 MiB/s, done.',
+        'Resolving deltas: 100% (18/18), done.',
+      ],
+      simulateDelay: 300,
+    },
+    '2.10': {
+      title: 'El flujo completo de Git',
+      module: 'Git para Humanos',
+      concept: 'Acabas de empezar en un proyecto. Haz el flujo completo de Git.',
+      why: 'Te doy instrucciones, t\u00fa decides qu\u00e9 comando usar.',
+      task: '',
+    },
+    '2.11': {
+      title: 'Quiz \u2014 Git para Humanos',
+      module: 'Git para Humanos',
+      concept: 'Vamos a ver cu\u00e1nto aprendiste de Git. 5 preguntas r\u00e1pidas.',
+      why: 'Responder preguntas refuerza lo que aprendiste. No te preocupes si fallas alguna \u2014 es parte del proceso.',
+      task: 'Usa \u2191\u2193 para moverte y Enter para seleccionar',
+    },
+  },
+  en: {
+    '2.1': {
+      title: 'What is Git',
+      module: 'Git for Humans',
+      concept: 'Git is a system that saves the history of changes in a project. Every time someone makes a change and "saves" it in Git, it\u2019s recorded forever.\n\nIt\u2019s like Google Docs but much more powerful: you can see who changed what, when, and why. And you can go back to any point in time.',
+      analogy: 'Imagine you write a document and every time you save, a snapshot of the ENTIRE project is created. Git is that camera. You can go back and see any snapshot from the past.',
+      why: 'AI agents use Git to save the changes they make. If you don\u2019t understand Git, you won\u2019t know what changed or how to go back.',
+      task: 'Press Enter to continue',
+    },
+    '2.2': {
+      title: 'What is a repository',
+      module: 'Git for Humans',
+      concept: 'A repository (or "repo") is a folder with Git enabled. It\u2019s your project folder + its entire history of changes.\n\nWhen someone says "clone the repo", they\u2019re saying "download a copy of the project with all its history".',
+      analogy: 'A repo is like a shared Google Drive, but with superpowers: infinite history, parallel branches, and it works offline.',
+      why: 'Every project where you\u2019ll use AI agents lives in a repo. It\u2019s the container for everything.',
+      task: 'Press Enter to continue',
+    },
+    '2.3': {
+      title: 'git status \u2014 The most important question',
+      module: 'Git for Humans',
+      concept: 'git status is the command you\u2019ll use the most. It tells you:\n\n  - What files changed\n  - What files are new\n  - What\u2019s ready to be saved\n  - Which branch you\u2019re on',
+      analogy: 'It\u2019s your car\u2019s dashboard: it shows you the state of everything at a glance.',
+      why: 'ALWAYS run git status before doing anything. It\u2019s the first question you should ask the project.',
+      task: 'Type git status',
+      hint: 'Type git, space, status. Then Enter \u21b5',
+      simulateLines: [
+        'On branch main',
+        'Changes not staged for commit:',
+        '  modified:   src/app.tsx',
+        '',
+        'Untracked files:',
+        '  src/components/Header.tsx',
+      ],
+      simulateDelay: 200,
+    },
+    '2.4': {
+      title: 'git log \u2014 What happened before me',
+      module: 'Git for Humans',
+      concept: 'git log shows you the history of changes. Each entry has who made the change, when, and a message describing what changed.\n\nIt\u2019s like reading the activity log of a shared document.',
+      why: 'When you arrive at a project, git log gives you context. You can see what was done recently and why.',
+      task: 'Type git log',
+      hint: 'Type git, space, log. Then Enter \u21b5',
+      simulateLines: [
+        'a3f2b1c fix: correct login button color',
+        '8d4e5f7 feat: add profile page',
+        'c1a9d3e refactor: extract Header component',
+      ],
+      simulateDelay: 200,
+    },
+    '2.5': {
+      title: 'git branch \u2014 Which universe am I in',
+      module: 'Git for Humans',
+      concept: 'Branches are parallel versions of the project. The main branch is called "main".\n\nWhen you want to make changes without affecting what works, you create a new branch. It\u2019s like making a copy of the document to experiment fearlessly.',
+      analogy: 'main is the official document. A branch is a copy where you can edit freely. If you like it, you merge it. If not, you discard it.',
+      why: 'AI agents should ALWAYS work on a separate branch, never directly on main.',
+      task: 'Type git branch',
+      hint: 'Type git, space, branch. Then Enter \u21b5',
+      simulateLines: [
+        '* main',
+        '  feature/new-page',
+        '  fix/button-color',
+      ],
+      simulateDelay: 200,
+    },
+    '2.6': {
+      title: 'git diff \u2014 See exactly what changed',
+      module: 'Git for Humans',
+      concept: 'git diff shows you the exact changes in files. Green lines = added. Red lines = removed.\n\nNever approve a change from an AI agent without seeing the diff first. It\u2019s your protection.\n\nIn a diff: lines with - (red) were removed. Lines with + (green) were added.',
+      why: 'The diff is your shield. It shows you exactly what was modified, line by line. If something looks off, you stop it.',
+      task: 'Type git diff',
+      hint: 'Type git, space, diff. Then Enter \u21b5',
+      simulateLines: [
+        'diff --git a/src/app.tsx b/src/app.tsx',
+        '--- a/src/app.tsx',
+        '+++ b/src/app.tsx',
+        '@@ -12,7 +12,7 @@',
+        '-  backgroundColor: "blue",',
+        '+  backgroundColor: "red",',
+      ],
+      simulateDelay: 200,
+    },
+    '2.7': {
+      title: 'Create a new branch',
+      module: 'Git for Humans',
+      concept: 'Before making changes, create a new branch:\n\n  git checkout -b your-branch-name\n\nThe -b means "new branch". The name can describe what you\u2019re going to do.',
+      why: 'GOLDEN RULE: never work directly on main. Always create a branch. If something goes wrong, main stays intact.',
+      task: 'Type git checkout -b mi-cambio',
+      hint: 'Type: git checkout -b mi-cambio (exactly like that). Then Enter \u21b5',
+      simulateLines: [
+        'Switched to a new branch \'mi-cambio\'',
+      ],
+      simulateDelay: 200,
+    },
+    '2.8': {
+      title: 'Save changes \u2014 add and commit',
+      module: 'Git for Humans',
+      concept: 'Saving in Git has two steps:\n\n  1. git add .  \u2014 select what to save (the dot = everything)\n  2. git commit -m "message"  \u2014 save with a description\n\nThe commit message describes WHAT you did and WHY. It\u2019s important.\n\nWhy two steps? Because sometimes you edit 5 files but only want to save 2. "add" selects which to include. "commit" saves them together.\n\nIn Git, "save" is called "commit". There\u2019s no Ctrl+S \u2014 everything is saved with git commit.\n\nCodes like abc1234 are unique Git identifiers. You don\u2019t need to memorize them.',
+      analogy: 'git add is putting things in a box. git commit is closing the box and labeling it.',
+      why: 'When an AI agent makes changes, you decide when to save them. A good message helps your team understand what happened.',
+      task: 'Type git add .',
+      hint: 'Type git, space, add, space, dot. Then Enter \u21b5',
+      simulateLines: [
+        '  $',
+      ],
+      simulateDelay: 150,
+    },
+    '2.9': {
+      title: 'git clone \u2014 Download a project',
+      module: 'Git for Humans',
+      concept: 'When you need to work with an existing project, you "clone" it. git clone downloads a complete copy with all its history.\n\nYour team gives you a repository link. You clone it and you\u2019re set.',
+      why: 'The first time you work with your team\u2019s code, you need to clone it. It\u2019s the first step.',
+      task: 'Type git clone followed by a URL',
+      hint: 'Type: git clone https://github.com/equipo/proyecto.git and Enter \u21b5',
+      simulateLines: [
+        'Cloning into \'proyecto\'...',
+        'remote: Enumerating objects: 47, done.',
+        'remote: Counting objects: 100% (47/47), done.',
+        'remote: Compressing objects: 100% (32/32), done.',
+        'Receiving objects: 100% (47/47), 12.34 KiB | 6.17 MiB/s, done.',
+        'Resolving deltas: 100% (18/18), done.',
+      ],
+      simulateDelay: 300,
+    },
+    '2.10': {
+      title: 'The complete Git flow',
+      module: 'Git for Humans',
+      concept: 'You just started on a project. Do the full Git flow.',
+      why: 'I\u2019ll give instructions, you decide which command to use.',
+      task: '',
+    },
+    '2.11': {
+      title: 'Quiz \u2014 Git for Humans',
+      module: 'Git for Humans',
+      concept: "Let\u2019s see how much you learned about Git. 5 quick questions.",
+      why: "Answering questions reinforces what you learned. Don\u2019t worry if you miss some \u2014 it\u2019s part of the process.",
+      task: 'Use \u2191\u2193 to navigate and Enter to select',
+    },
+  },
+  fr: {
+    '2.1': {
+      title: 'Qu\u2019est-ce que Git',
+      module: 'Git pour les Humains',
+      concept: 'Git est un syst\u00e8me qui sauvegarde l\u2019historique des changements d\u2019un projet. Chaque fois que quelqu\u2019un fait un changement et le "sauvegarde" dans Git, c\u2019est enregistr\u00e9 pour toujours.\n\nC\u2019est comme Google Docs mais beaucoup plus puissant : tu peux voir qui a chang\u00e9 quoi, quand, et pourquoi. Et tu peux revenir en arri\u00e8re \u00e0 tout moment.',
+      analogy: 'Imagine que tu \u00e9cris un document et que chaque fois que tu sauvegardes, une photo instantan\u00e9e de TOUT le projet est cr\u00e9\u00e9e. Git est cet appareil photo. Tu peux revoir n\u2019importe quelle photo du pass\u00e9.',
+      why: 'Les agents IA utilisent Git pour sauvegarder les changements qu\u2019ils font. Si tu ne comprends pas Git, tu ne sauras pas ce qui a chang\u00e9 ni comment revenir en arri\u00e8re.',
+      task: 'Appuie sur Entr\u00e9e pour continuer',
+    },
+    '2.2': {
+      title: 'Qu\u2019est-ce qu\u2019un d\u00e9p\u00f4t',
+      module: 'Git pour les Humains',
+      concept: 'Un d\u00e9p\u00f4t (ou "repo") est un dossier avec Git activ\u00e9. C\u2019est le dossier de ton projet + tout son historique de changements.\n\nQuand quelqu\u2019un te dit "clone le repo", il te dit "t\u00e9l\u00e9charge une copie du projet avec tout son historique".',
+      analogy: 'Un repo c\u2019est comme un Google Drive partag\u00e9, mais avec des superpouvoirs : historique infini, branches parall\u00e8les, et \u00e7a fonctionne hors ligne.',
+      why: 'Tout projet o\u00f9 tu vas utiliser des agents IA vit dans un repo. C\u2019est le conteneur de tout.',
+      task: 'Appuie sur Entr\u00e9e pour continuer',
+    },
+    '2.3': {
+      title: 'git status \u2014 La question la plus importante',
+      module: 'Git pour les Humains',
+      concept: 'git status est la commande que tu vas le plus utiliser. Elle te dit :\n\n  - Quels fichiers ont chang\u00e9\n  - Quels fichiers sont nouveaux\n  - Ce qui est pr\u00eat \u00e0 \u00eatre sauvegard\u00e9\n  - Sur quelle branche tu es',
+      analogy: 'C\u2019est le tableau de bord de ta voiture : il te montre l\u2019\u00e9tat de tout en un coup d\u2019\u0153il.',
+      why: 'TOUJOURS ex\u00e9cuter git status avant de faire quoi que ce soit. C\u2019est la premi\u00e8re question que tu dois poser au projet.',
+      task: 'Tape git status',
+      hint: 'Tape git, espace, status. Puis Entr\u00e9e \u21b5',
+      simulateLines: [
+        'On branch main',
+        'Changes not staged for commit:',
+        '  modified:   src/app.tsx',
+        '',
+        'Untracked files:',
+        '  src/components/Header.tsx',
+      ],
+      simulateDelay: 200,
+    },
+    '2.4': {
+      title: 'git log \u2014 Ce qui s\u2019est pass\u00e9 avant moi',
+      module: 'Git pour les Humains',
+      concept: 'git log te montre l\u2019historique des changements. Chaque entr\u00e9e a qui a fait le changement, quand, et un message d\u00e9crivant ce qui a chang\u00e9.\n\nC\u2019est comme lire le journal d\u2019activit\u00e9 d\u2019un document partag\u00e9.',
+      why: 'Quand tu arrives sur un projet, git log te donne du contexte. Tu peux voir ce qui a \u00e9t\u00e9 fait r\u00e9cemment et pourquoi.',
+      task: 'Tape git log',
+      hint: 'Tape git, espace, log. Puis Entr\u00e9e \u21b5',
+      simulateLines: [
+        'a3f2b1c fix: corriger la couleur du bouton de login',
+        '8d4e5f7 feat: ajouter la page de profil',
+        'c1a9d3e refactor: extraire le composant Header',
+      ],
+      simulateDelay: 200,
+    },
+    '2.5': {
+      title: 'git branch \u2014 Dans quel univers suis-je',
+      module: 'Git pour les Humains',
+      concept: 'Les branches sont des versions parall\u00e8les du projet. La branche principale s\u2019appelle "main".\n\nQuand tu veux faire des changements sans affecter ce qui fonctionne, tu cr\u00e9es une nouvelle branche. C\u2019est comme faire une copie du document pour exp\u00e9rimenter sans peur.',
+      analogy: 'main est le document officiel. Une branche est une copie o\u00f9 tu peux \u00e9diter librement. Si \u00e7a te pla\u00eet, tu fusionne. Sinon, tu jettes.',
+      why: 'Les agents IA devraient TOUJOURS travailler sur une branche s\u00e9par\u00e9e, jamais directement sur main.',
+      task: 'Tape git branch',
+      hint: 'Tape git, espace, branch. Puis Entr\u00e9e \u21b5',
+      simulateLines: [
+        '* main',
+        '  feature/nouvelle-page',
+        '  fix/couleur-bouton',
+      ],
+      simulateDelay: 200,
+    },
+    '2.6': {
+      title: 'git diff \u2014 Voir exactement ce qui a chang\u00e9',
+      module: 'Git pour les Humains',
+      concept: 'git diff te montre les changements exacts dans les fichiers. Lignes vertes = ajout\u00e9es. Lignes rouges = supprim\u00e9es.\n\nN\u2019approuve jamais un changement d\u2019un agent IA sans voir le diff d\u2019abord. C\u2019est ta protection.\n\nDans un diff : les lignes avec - (rouge) ont \u00e9t\u00e9 supprim\u00e9es. Les lignes avec + (vert) ont \u00e9t\u00e9 ajout\u00e9es.',
+      why: 'Le diff est ton bouclier. Il te montre exactement ce qui a \u00e9t\u00e9 modifi\u00e9, ligne par ligne. Si quelque chose semble bizarre, tu arr\u00eates.',
+      task: 'Tape git diff',
+      hint: 'Tape git, espace, diff. Puis Entr\u00e9e \u21b5',
+      simulateLines: [
+        'diff --git a/src/app.tsx b/src/app.tsx',
+        '--- a/src/app.tsx',
+        '+++ b/src/app.tsx',
+        '@@ -12,7 +12,7 @@',
+        '-  backgroundColor: "blue",',
+        '+  backgroundColor: "red",',
+      ],
+      simulateDelay: 200,
+    },
+    '2.7': {
+      title: 'Cr\u00e9er une nouvelle branche',
+      module: 'Git pour les Humains',
+      concept: 'Avant de faire des changements, cr\u00e9e une nouvelle branche :\n\n  git checkout -b nom-de-ta-branche\n\nLe -b signifie "nouvelle branche". Le nom peut d\u00e9crire ce que tu vas faire.',
+      why: 'R\u00c8GLE D\u2019OR : ne travaille jamais directement sur main. Cr\u00e9e toujours une branche. Si quelque chose tourne mal, main reste intact.',
+      task: 'Tape git checkout -b mi-cambio',
+      hint: 'Tape : git checkout -b mi-cambio (tel quel). Puis Entr\u00e9e \u21b5',
+      simulateLines: [
+        'Switched to a new branch \'mi-cambio\'',
+      ],
+      simulateDelay: 200,
+    },
+    '2.8': {
+      title: 'Sauvegarder les changements \u2014 add et commit',
+      module: 'Git pour les Humains',
+      concept: 'Sauvegarder dans Git se fait en deux \u00e9tapes :\n\n  1. git add .  \u2014 s\u00e9lectionner quoi sauvegarder (le point = tout)\n  2. git commit -m "message"  \u2014 sauvegarder avec une description\n\nLe message du commit d\u00e9crit CE QUE tu as fait et POURQUOI. C\u2019est important.\n\nPourquoi deux \u00e9tapes ? Parce que parfois tu modifies 5 fichiers mais tu veux n\u2019en sauvegarder que 2. "add" s\u00e9lectionne lesquels inclure. "commit" les sauvegarde ensemble.\n\nEn Git, "sauvegarder" s\u2019appelle "commit". Il n\u2019y a pas de Ctrl+S \u2014 tout se sauvegarde avec git commit.\n\nLes codes comme abc1234 sont des identifiants uniques de Git. Tu n\u2019as pas besoin de les m\u00e9moriser.',
+      analogy: 'git add c\u2019est mettre des choses dans une bo\u00eete. git commit c\u2019est fermer la bo\u00eete et mettre une \u00e9tiquette.',
+      why: 'Quand un agent IA fait des changements, c\u2019est toi qui d\u00e9cides quand les sauvegarder. Un bon message aide ton \u00e9quipe \u00e0 comprendre ce qui s\u2019est pass\u00e9.',
+      task: 'Tape git add .',
+      hint: 'Tape git, espace, add, espace, point. Puis Entr\u00e9e \u21b5',
+      simulateLines: [
+        '  $',
+      ],
+      simulateDelay: 150,
+    },
+    '2.9': {
+      title: 'git clone \u2014 T\u00e9l\u00e9charger un projet',
+      module: 'Git pour les Humains',
+      concept: 'Quand tu as besoin de travailler avec un projet existant, tu le "clones". git clone t\u00e9l\u00e9charge une copie compl\u00e8te avec tout son historique.\n\nTon \u00e9quipe te donne un lien du d\u00e9p\u00f4t. Tu le clones et c\u2019est parti.',
+      why: 'La premi\u00e8re fois que tu travailles avec le code de ton \u00e9quipe, tu dois le cloner. C\u2019est la premi\u00e8re \u00e9tape.',
+      task: 'Tape git clone suivi d\u2019un URL',
+      hint: 'Tape : git clone https://github.com/equipo/proyecto.git et Entr\u00e9e \u21b5',
+      simulateLines: [
+        'Cloning into \'proyecto\'...',
+        'remote: Enumerating objects: 47, done.',
+        'remote: Counting objects: 100% (47/47), done.',
+        'remote: Compressing objects: 100% (32/32), done.',
+        'Receiving objects: 100% (47/47), 12.34 KiB | 6.17 MiB/s, done.',
+        'Resolving deltas: 100% (18/18), done.',
+      ],
+      simulateDelay: 300,
+    },
+    '2.10': {
+      title: 'Le flux complet de Git',
+      module: 'Git pour les Humains',
+      concept: 'Tu viens de commencer sur un projet. Fais le flux Git complet.',
+      why: 'Je te donne les instructions, tu d\u00e9cides quelle commande utiliser.',
+      task: '',
+    },
+    '2.11': {
+      title: 'Quiz \u2014 Git pour les Humains',
+      module: 'Git pour les Humains',
+      concept: 'Voyons combien tu as appris sur Git. 5 questions rapides.',
+      why: "R\u00e9pondre \u00e0 des questions renforce ce que tu as appris. Ne t\u2019inqui\u00e8te pas si tu en rates \u2014 \u00e7a fait partie du processus.",
+      task: 'Utilise \u2191\u2193 pour naviguer et Entr\u00e9e pour s\u00e9lectionner',
+    },
+  },
+};
+
+import { type CommandStep } from '../../components/MultiCommandPrompt.js';
+
+interface QuizQuestionData {
+  question: string;
+  options: string[];
+  correct: number;
+  explanation: string;
+}
+
+const quizModule2: Record<Locale, QuizQuestionData[]> = {
+  es: [
+    { question: '\u00bfCu\u00e1l es el PRIMER comando que debes ejecutar al llegar a un proyecto?', options: ['git log', 'git diff', 'git status', 'git branch'], correct: 2, explanation: 'git status te dice el estado actual. Siempre primero.' },
+    { question: '\u00bfQu\u00e9 muestra git diff?', options: ['Los archivos nuevos', 'Las diferencias exactas en el c\u00f3digo', 'El historial de commits', 'Las ramas del proyecto'], correct: 1, explanation: 'git diff muestra l\u00ednea por l\u00ednea qu\u00e9 cambi\u00f3.' },
+    { question: '\u00bfPor qu\u00e9 NUNCA debes trabajar directo en main?', options: ['Es m\u00e1s lento', 'Puede romper lo que funciona', 'No se puede', 'Es ilegal'], correct: 1, explanation: 'main es la versi\u00f3n estable. Siempre crea una rama para tus cambios.' },
+    { question: '\u00bfQu\u00e9 hace git add .?', options: ['Borra todos los archivos', 'Selecciona todos los archivos para guardar', 'Crea una rama nueva', 'Sube los cambios al servidor'], correct: 1, explanation: 'git add . selecciona TODO para el pr\u00f3ximo commit.' },
+    { question: '\u00bfQu\u00e9 es un commit?', options: ['Un archivo nuevo', 'Una copia del proyecto guardada con mensaje', 'Un comando para borrar', 'Una rama paralela'], correct: 1, explanation: 'Un commit es una foto del proyecto en un momento espec\u00edfico, con una descripci\u00f3n.' },
+  ],
+  en: [
+    { question: 'What is the FIRST command you should run when arriving at a project?', options: ['git log', 'git diff', 'git status', 'git branch'], correct: 2, explanation: 'git status tells you the current state. Always first.' },
+    { question: 'What does git diff show?', options: ['New files', 'The exact differences in the code', 'The commit history', 'The project branches'], correct: 1, explanation: 'git diff shows line by line what changed.' },
+    { question: 'Why should you NEVER work directly on main?', options: ['It is slower', 'It can break what works', 'You cannot', 'It is illegal'], correct: 1, explanation: 'main is the stable version. Always create a branch for your changes.' },
+    { question: 'What does git add . do?', options: ['Deletes all files', 'Stages all files for saving', 'Creates a new branch', 'Pushes changes to the server'], correct: 1, explanation: 'git add . stages EVERYTHING for the next commit.' },
+    { question: 'What is a commit?', options: ['A new file', 'A saved snapshot of the project with a message', 'A delete command', 'A parallel branch'], correct: 1, explanation: 'A commit is a snapshot of the project at a specific moment, with a description.' },
+  ],
+  fr: [
+    { question: 'Quelle est la PREMI\u00c8RE commande \u00e0 ex\u00e9cuter en arrivant sur un projet ?', options: ['git log', 'git diff', 'git status', 'git branch'], correct: 2, explanation: 'git status te dit l\u2019\u00e9tat actuel. Toujours en premier.' },
+    { question: 'Que montre git diff ?', options: ['Les fichiers nouveaux', 'Les diff\u00e9rences exactes dans le code', 'L\u2019historique des commits', 'Les branches du projet'], correct: 1, explanation: 'git diff montre ligne par ligne ce qui a chang\u00e9.' },
+    { question: 'Pourquoi ne faut-il JAMAIS travailler directement sur main ?', options: ['C\u2019est plus lent', '\u00c7a peut casser ce qui fonctionne', 'On ne peut pas', 'C\u2019est ill\u00e9gal'], correct: 1, explanation: 'main est la version stable. Cr\u00e9e toujours une branche pour tes changements.' },
+    { question: 'Que fait git add . ?', options: ['Supprime tous les fichiers', 'S\u00e9lectionne tous les fichiers \u00e0 sauvegarder', 'Cr\u00e9e une nouvelle branche', 'Envoie les changements au serveur'], correct: 1, explanation: 'git add . s\u00e9lectionne TOUT pour le prochain commit.' },
+    { question: 'Qu\u2019est-ce qu\u2019un commit ?', options: ['Un nouveau fichier', 'Une copie du projet sauvegard\u00e9e avec un message', 'Une commande pour supprimer', 'Une branche parall\u00e8le'], correct: 1, explanation: 'Un commit est une photo du projet \u00e0 un moment pr\u00e9cis, avec une description.' },
+  ],
+};
+
+const practiceModule2: Record<Locale, CommandStep[]> = {
+  es: [
+    { challenge: 'Revisa el estado actual del proyecto', command: 'git status', output: ['On branch main', 'nothing to commit, working tree clean'], hint1: 'Es el comando más importante de git...', hint2: 'El comando es git status' },
+    { challenge: 'Crea una rama nueva llamada mi-feature', command: 'git checkout -b mi-feature', output: ["Switched to a new branch 'mi-feature'"], hint1: 'Necesitas checkout con -b y el nombre...', hint2: 'El comando es git checkout -b mi-feature' },
+    { challenge: 'Revisa qué cambió en los archivos', command: 'git diff', output: ['diff --git a/src/app.tsx b/src/app.tsx', '--- a/src/app.tsx', '+++ b/src/app.tsx', '-  color: "blue"', '+  color: "red"'], hint1: 'El comando que muestra diferencias...', hint2: 'El comando es git diff' },
+    { challenge: 'Selecciona todos los archivos para guardar', command: 'git add .', output: [], hint1: 'El comando para agregar + un punto (todo)...', hint2: 'El comando es git add .' },
+    { challenge: 'Revisa el estado una última vez', command: 'git status', output: ['On branch mi-feature', 'Changes to be committed:', '  modified:   src/app.tsx'], hint1: 'El mismo comando de siempre...', hint2: 'El comando es git status' },
+  ],
+  en: [
+    { challenge: 'Check the current state of the project', command: 'git status', output: ['On branch main', 'nothing to commit, working tree clean'], hint1: "It's the most important git command...", hint2: 'The command is git status' },
+    { challenge: 'Create a new branch called mi-feature', command: 'git checkout -b mi-feature', output: ["Switched to a new branch 'mi-feature'"], hint1: 'You need checkout with -b and the name...', hint2: 'The command is git checkout -b mi-feature' },
+    { challenge: 'See what changed in the files', command: 'git diff', output: ['diff --git a/src/app.tsx b/src/app.tsx', '--- a/src/app.tsx', '+++ b/src/app.tsx', '-  color: "blue"', '+  color: "red"'], hint1: 'The command that shows differences...', hint2: 'The command is git diff' },
+    { challenge: 'Stage all files for saving', command: 'git add .', output: [], hint1: 'The add command + a dot (everything)...', hint2: 'The command is git add .' },
+    { challenge: 'Check the status one last time', command: 'git status', output: ['On branch mi-feature', 'Changes to be committed:', '  modified:   src/app.tsx'], hint1: 'Same command as always...', hint2: 'The command is git status' },
+  ],
+  fr: [
+    { challenge: "Vérifie l'état actuel du projet", command: 'git status', output: ['On branch main', 'nothing to commit, working tree clean'], hint1: "C'est la commande git la plus importante...", hint2: 'La commande est git status' },
+    { challenge: 'Crée une nouvelle branche appelée mi-feature', command: 'git checkout -b mi-feature', output: ["Switched to a new branch 'mi-feature'"], hint1: 'Tu as besoin de checkout avec -b et le nom...', hint2: 'La commande est git checkout -b mi-feature' },
+    { challenge: 'Regarde ce qui a changé dans les fichiers', command: 'git diff', output: ['diff --git a/src/app.tsx b/src/app.tsx', '--- a/src/app.tsx', '+++ b/src/app.tsx', '-  color: "blue"', '+  color: "red"'], hint1: 'La commande qui montre les différences...', hint2: 'La commande est git diff' },
+    { challenge: 'Sélectionne tous les fichiers à sauvegarder', command: 'git add .', output: [], hint1: 'La commande pour ajouter + un point (tout)...', hint2: 'La commande est git add .' },
+    { challenge: "Vérifie l'état une dernière fois", command: 'git status', output: ['On branch mi-feature', 'Changes to be committed:', '  modified:   src/app.tsx'], hint1: 'La même commande que toujours...', hint2: 'La commande est git status' },
+  ],
+};
+
+function buildSimulate(c: LessonText) {
+  if (!c.simulateLines) return undefined;
+  return { lines: c.simulateLines, delay: c.simulateDelay };
+}
+
+export function getModule2Lessons(locale: Locale): Lesson[] {
+  const c = content[locale];
+  const m = msg[locale];
+
+  return [
+    {
+      id: '2.1',
+      ...c['2.1']!,
+      validate: () => ({ valid: true, message: '' }),
+    },
+    {
+      id: '2.2',
+      ...c['2.2']!,
+      validate: () => ({ valid: true, message: '' }),
+    },
+    {
+      id: '2.3',
+      ...c['2.3']!,
+      command: 'git status',
+      validate: (input: string) => {
+        const t = input.trim().toLowerCase();
+        if (t === 'git status') return { valid: true, message: m['2.3'].ok };
+        if (t === 'gitstatus') return { valid: false, message: (m['2.3'] as any).failNoSpace };
+        if (t === 'status') return { valid: false, message: (m['2.3'] as any).failMissing };
+        return { valid: false, message: m['2.3'].fail };
+      },
+      simulate: buildSimulate(c['2.3']!),
+    },
+    {
+      id: '2.4',
+      ...c['2.4']!,
+      command: 'git log',
+      validate: (input: string) => {
+        const t = input.trim().toLowerCase();
+        if (t === 'git log') return { valid: true, message: m['2.4'].ok };
+        return { valid: false, message: m['2.4'].fail };
+      },
+      simulate: buildSimulate(c['2.4']!),
+    },
+    {
+      id: '2.5',
+      ...c['2.5']!,
+      command: 'git branch',
+      validate: (input: string) => {
+        const t = input.trim().toLowerCase();
+        if (t === 'git branch') return { valid: true, message: m['2.5'].ok };
+        return { valid: false, message: m['2.5'].fail };
+      },
+      simulate: buildSimulate(c['2.5']!),
+    },
+    {
+      id: '2.6',
+      ...c['2.6']!,
+      command: 'git diff',
+      validate: (input: string) => {
+        const t = input.trim().toLowerCase();
+        if (t === 'git diff') return { valid: true, message: m['2.6'].ok };
+        return { valid: false, message: m['2.6'].fail };
+      },
+      simulate: buildSimulate(c['2.6']!),
+    },
+    {
+      id: '2.7',
+      ...c['2.7']!,
+      command: 'git checkout -b mi-cambio',
+      validate: (input: string) => {
+        const t = input.trim().toLowerCase();
+        if (t === 'git checkout -b mi-cambio') return { valid: true, message: m['2.7'].ok };
+        if (t.startsWith('git checkout -b ') && t.length > 16) return { valid: true, message: m['2.7'].ok };
+        if (t === 'git checkout') return { valid: false, message: (m['2.7'] as any).failMissing };
+        return { valid: false, message: m['2.7'].fail };
+      },
+      simulate: buildSimulate(c['2.7']!),
+    },
+    {
+      id: '2.8',
+      ...c['2.8']!,
+      command: 'git add .',
+      validate: (input: string) => {
+        const t = input.trim().toLowerCase();
+        if (t === 'git add .') return { valid: true, message: m['2.8'].ok };
+        if (t === 'git add') return { valid: false, message: (m['2.8'] as any).failMissing };
+        return { valid: false, message: m['2.8'].fail };
+      },
+      simulate: buildSimulate(c['2.8']!),
+    },
+    {
+      id: '2.9',
+      ...c['2.9']!,
+      command: 'git clone https://github.com/equipo/proyecto.git',
+      validate: (input: string) => {
+        const t = input.trim().toLowerCase();
+        if (t.startsWith('git clone ') && t.length > 11) return { valid: true, message: m['2.9'].ok };
+        if (t === 'git clone') return { valid: false, message: (m['2.9'] as any).failMissing };
+        return { valid: false, message: m['2.9'].fail };
+      },
+      simulate: buildSimulate(c['2.9']!),
+    },
+    {
+      id: '2.10',
+      ...c['2.10']!,
+      validate: () => ({ valid: true, message: m['2.10'].ok }),
+      practiceSteps: practiceModule2[locale],
+    },
+    {
+      id: '2.11',
+      ...c['2.11']!,
+      validate: () => ({ valid: true, message: '' }),
+      quizQuestions: quizModule2[locale],
+    },
+  ];
+}

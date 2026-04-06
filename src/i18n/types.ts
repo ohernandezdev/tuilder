@@ -82,6 +82,7 @@ export interface UIStrings {
 
   // Main menu
   menuContinue: string;
+  menuStart: string;
   menuNewGame: string;
   menuModules: string;
   menuChangeLang: string;
@@ -93,4 +94,31 @@ export interface UIStrings {
   commandNotRecognized: string;
   select: string;
   confirm: string;
+
+  // Cheat sheet
+  cheatSheetTitle: string;
+  cheatSheetHint: string;
+  cheatSheetClose: string;
+  cheatSheetNavigation: string;
+  cheatSheetFiles: string;
+  cheatSheetGit: string;
+  cheatSheetAI: string;
+  // Cheat sheet descriptions
+  csPwd: string;
+  csCd: string;
+  csCdUp: string;
+  csLs: string;
+  csCat: string;
+  csMkdir: string;
+  csTouch: string;
+  csGitInit: string;
+  csGitStatus: string;
+  csGitAdd: string;
+  csGitCommit: string;
+  csGitLog: string;
+  csGitBranch: string;
+  csGitCheckout: string;
+  csGitDiff: string;
+  csClaude: string;
+  csCtrlC: string;
 }

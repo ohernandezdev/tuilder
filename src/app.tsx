@@ -14,6 +14,7 @@ import { SplashScreen } from './components/SplashScreen.js';
 import { Logo } from './components/Logo.js';
 import { playSound } from './utils/sound.js';
 import { getLevel, XP_PER_LESSON, type Level } from './utils/xp.js';
+import { CheatSheet } from './components/CheatSheet.js';
 
 type Screen = 'splash' | 'lang' | 'welcome' | 'menu' | 'modules' | 'confirmReset' | 'lesson' | 'complete';
 
@@ -84,7 +85,7 @@ function MainMenu({ hasProgress, isGraduated, onSelect }: {
 }) {
   const options: { key: string; label: string; action: 'continue' | 'newgame' | 'modules' | 'lang' | 'cert' }[] = [];
   if (hasProgress) options.push({ key: 'continue', label: ui().menuContinue, action: 'continue' });
-  options.push({ key: 'newgame', label: ui().menuNewGame, action: 'newgame' });
+  options.push({ key: 'newgame', label: hasProgress ? ui().menuNewGame : ui().menuStart, action: 'newgame' });
   if (hasProgress) options.push({ key: 'modules', label: ui().menuModules, action: 'modules' });
   options.push({ key: 'lang', label: ui().menuChangeLang, action: 'lang' });
   if (isGraduated) options.push({ key: 'cert', label: ui().menuCertificate, action: 'cert' });
@@ -192,6 +193,7 @@ export function App({ startLesson }: AppProps) {
   );
   const [levelUpInfo, setLevelUpInfo] = useState<Level | null>(null);
   const [pendingNextIndex, setPendingNextIndex] = useState<number | null>(null);
+  const [showCheatSheet, setShowCheatSheet] = useState(false);
 
   const currentLesson = allLessons[lessonIndex];
 
@@ -240,7 +242,13 @@ export function App({ startLesson }: AppProps) {
         setScreen('lesson');
       }
     } else if (action === 'newgame') {
-      setScreen('confirmReset');
+      if (hasProgress) {
+        setScreen('confirmReset');
+      } else {
+        // No progress — just start lesson 0.1
+        setLessonIndex(0);
+        setScreen('lesson');
+      }
     } else if (action === 'modules') {
       setScreen('modules');
     } else if (action === 'lang') {
@@ -268,7 +276,7 @@ export function App({ startLesson }: AppProps) {
     setProgress(fresh);
     setLessonIndex(0);
     playSound('advance');
-    setScreen('menu');
+    setScreen('lesson');
   }, [progress.locale, progress.userName]);
 
   const handleLessonComplete = useCallback(() => {
@@ -310,6 +318,15 @@ export function App({ startLesson }: AppProps) {
 
   const isMenuScreen = screen === 'lang' || screen === 'welcome' || screen === 'complete' || screen === 'menu' || screen === 'modules' || screen === 'confirmReset';
 
+  // Global Tab toggle for cheat sheet — any key closes it
+  useInput((_input, key) => {
+    if (showCheatSheet) {
+      setShowCheatSheet(false);
+    } else if (key.tab) {
+      setShowCheatSheet(true);
+    }
+  });
+
   // Confirm reset screen input
   const ConfirmReset = () => {
     useInput((_input, key) => {
@@ -332,7 +349,7 @@ export function App({ startLesson }: AppProps) {
       )}
 
       {/* ── MENU SCREENS: logo header + content ── */}
-      {isMenuScreen && (
+      {isMenuScreen && !showCheatSheet && (
         <Box flexDirection="column">
           <Box paddingX={spacing.md} paddingTop={1} paddingBottom={1} flexDirection="column">
             <Logo />
@@ -413,8 +430,13 @@ export function App({ startLesson }: AppProps) {
         </Box>
       )}
 
+      {/* ── CHEAT SHEET OVERLAY ── */}
+      {showCheatSheet && screen !== 'splash' && (
+        <CheatSheet />
+      )}
+
       {/* ── LESSON SCREEN: compact header + lesson ── */}
-      {screen === 'lesson' && (
+      {screen === 'lesson' && !showCheatSheet && (
         <Box flexDirection="column">
           <Box
             borderStyle="single"
@@ -468,6 +490,13 @@ export function App({ startLesson }: AppProps) {
               />
             </Box>
           )}
+        </Box>
+      )}
+
+      {/* ── Global Tab hint ── */}
+      {screen !== 'splash' && !showCheatSheet && (
+        <Box justifyContent="flex-end" paddingX={2} marginTop={1}>
+          <Text color={theme.textGhost}>{ui().cheatSheetHint}</Text>
         </Box>
       )}
     </Box>

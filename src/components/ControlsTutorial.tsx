@@ -97,6 +97,10 @@ export function ControlsTutorial({ onComplete }: ControlsTutorialProps) {
   const handleTextChange = (value: string) => {
     if (showSuccess) return;
     setTypedValue(value);
+  };
+
+  const handleTextSubmit = (value: string) => {
+    if (showSuccess) return;
     if (step?.waitFor === 'type' && step.typeTarget &&
         value.trim().toLowerCase() === step.typeTarget.toLowerCase()) {
       completeStep();
@@ -154,7 +158,7 @@ export function ControlsTutorial({ onComplete }: ControlsTutorialProps) {
           {step.waitFor === 'type' && (
             <Box marginTop={1}>
               <Text color={theme.brand} bold>{'    > '}</Text>
-              <TextInput value={typedValue} onChange={handleTextChange} />
+              <TextInput value={typedValue} onChange={handleTextChange} onSubmit={handleTextSubmit} />
             </Box>
           )}
         </Box>

@@ -73,6 +73,7 @@ export const en: UIStrings = {
 
   // Main menu
   menuContinue: 'Continue',
+  menuStart: 'Start',
   menuNewGame: 'Start over',
   menuModules: 'Go to a module',
   menuChangeLang: 'Change language',
@@ -87,4 +88,30 @@ export const en: UIStrings = {
   commandNotRecognized: 'command not recognized',
   select: 'select',
   confirm: 'confirm',
+
+  // Cheat sheet
+  cheatSheetTitle: 'Cheat Sheet',
+  cheatSheetHint: 'Tab = cheat sheet',
+  cheatSheetClose: 'any key to close',
+  cheatSheetNavigation: 'Navigation',
+  cheatSheetFiles: 'Files',
+  cheatSheetGit: 'Git',
+  cheatSheetAI: 'AI Agents',
+  csPwd: 'what folder am I in?',
+  csCd: 'go into a folder',
+  csCdUp: 'go back up',
+  csLs: 'see what\'s here',
+  csCat: 'read a file',
+  csMkdir: 'create a new folder',
+  csTouch: 'create an empty file',
+  csGitInit: 'start saving versions',
+  csGitStatus: 'what did I change?',
+  csGitAdd: 'select my changes',
+  csGitCommit: 'save with a message',
+  csGitLog: 'see what\'s been saved',
+  csGitBranch: 'create a copy to experiment',
+  csGitCheckout: 'switch to another copy',
+  csGitDiff: 'see what\'s different',
+  csClaude: 'open the AI agent',
+  csCtrlC: 'stop what\'s running',
 };

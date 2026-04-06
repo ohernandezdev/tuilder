@@ -4,6 +4,7 @@ import TextInput from 'ink-text-input';
 import { theme } from '../theme.js';
 import { ui, fmt } from '../i18n/index.js';
 import { playSound } from '../utils/sound.js';
+import { colorize } from '../utils/colorize.js';
 import { TypeWriter } from './TypeWriter.js';
 import { EnterPrompt } from './EnterPrompt.js';
 
@@ -14,9 +15,11 @@ interface CommandPromptProps {
   onBack?: () => void;
   simulateLines?: string[];
   simulateDelay?: number;
+  prompt?: string;
+  prefillLines?: string[]; // lines shown inside terminal BEFORE the input (e.g. previous commands)
 }
 
-export function CommandPrompt({ expectedCommand, onComplete, hint, onBack, simulateLines, simulateDelay }: CommandPromptProps) {
+export function CommandPrompt({ expectedCommand, onComplete, hint, onBack, simulateLines, simulateDelay, prompt, prefillLines }: CommandPromptProps) {
   const [value, setValue] = useState('');
   const [error, setError] = useState('');
   const [showHint, setShowHint] = useState(false);
@@ -28,9 +31,10 @@ export function CommandPrompt({ expectedCommand, onComplete, hint, onBack, simul
   const [succeeded, setSucceeded] = useState(false);
   const [outputDone, setOutputDone] = useState(false);
 
+  // CommandPrompt is for LEARNING — always show the command immediately.
+  // Only practiceSteps (MultiCommandPrompt) use progressive hints.
   useEffect(() => {
-    const timer = setTimeout(() => setShowHint(true), 8000);
-    return () => clearTimeout(timer);
+    setShowHint(true);
   }, []);
 
   useEffect(() => {
@@ -93,19 +97,18 @@ export function CommandPrompt({ expectedCommand, onComplete, hint, onBack, simul
     return (
       <Box flexDirection="column" gap={1}>
         {/* The command the user typed (frozen) */}
-        <Box paddingLeft={2}>
-          <Text color={theme.brand} bold>{'> '}</Text>
+        <Box>
+          <Text color={theme.success}>{(prompt ?? '$') + ' '}</Text>
           <Text color={theme.text}>{expectedCommand}</Text>
         </Box>
 
         {/* Simulated output — appears line by line */}
         {simulateLines && (
-          <Box paddingLeft={2} flexDirection="column">
+          <Box flexDirection="column">
             <TypeWriter
               lines={simulateLines}
               delay={simulateDelay ?? 400}
               onDone={() => setOutputDone(true)}
-              color={theme.textSecondary}
             />
           </Box>
         )}
@@ -118,27 +121,33 @@ export function CommandPrompt({ expectedCommand, onComplete, hint, onBack, simul
   // ── Input mode ──
   return (
     <Box flexDirection="column" gap={1}>
-      <Box paddingLeft={leftPad}>
-        <Text color={theme.brand} bold>{'> '}</Text>
+      {/* Prefill: previous terminal content */}
+      {prefillLines && prefillLines.length > 0 && (
+        <Box flexDirection="column">
+          {prefillLines.map((line, i) => (
+            <Box key={i}>{colorize(line, theme)}</Box>
+          ))}
+        </Box>
+      )}
+      <Box marginLeft={shakeOffset}>
+        <Text color={theme.success}>{(prompt ?? '$') + ' '}</Text>
         <TextInput value={value} onChange={setValue} onSubmit={handleSubmit} />
       </Box>
 
       {error && (
-        <Text color={theme.warning}>{'    '}{error}</Text>
+        <Text color={theme.warning}>{'  '}{error}</Text>
       )}
 
       {showHint && hint && !error && (
-        <Text color={theme.info}>{'    '}{hint}</Text>
+        <Text color={theme.info}>{'  '}{hint}</Text>
       )}
 
-      {(attempts >= 2 || showHint) && (
-        <Text color={theme.textMuted}>
-          {'    '}
-          {ui().writeAndEnter.split('{cmd}')[0]}
-          <Text color={theme.commandHighlight} bold>{expectedCommand}</Text>
-          {ui().writeAndEnter.split('{cmd}')[1] ?? ''}
-        </Text>
-      )}
+      <Text color={theme.textMuted}>
+        {'  '}
+        {ui().writeAndEnter.split('{cmd}')[0]}
+        <Text color={theme.commandHighlight} bold>{expectedCommand}</Text>
+        {ui().writeAndEnter.split('{cmd}')[1] ?? ''}
+      </Text>
     </Box>
   );
 }

@@ -60,14 +60,14 @@ const content: Record<Locale, Record<string, LessonText>> = {
       module: 'Tu primera tarea real',
       concept: 'Acabas de unirte a un equipo que tiene una landing page. Tu primera tarea: cambiar el título de "Welcome to our app" a "Build something amazing".\n\nEl repositorio está en GitHub. Vamos a hacer todo el flujo: clonar, explorar, crear branch, pedir el cambio al agente, revisar, guardar y crear un Pull Request.',
       why: 'Así es como funciona el trabajo real. No importa si es tu primer día — el flujo siempre es el mismo.',
-      task: 'Presiona Enter para continuar',
+      task: '',
     },
     '4.2': {
       title: 'Clonar el proyecto',
       module: 'Tu primera tarea real',
       concept: 'Lo primero es traer el proyecto a tu máquina. git clone descarga una copia completa del repositorio.\n\n(Esta URL es un ejemplo. En tu trabajo real, tu equipo te dará la URL del repositorio.)',
       why: 'No puedes trabajar en algo que no tienes. Clonar es siempre el primer paso.',
-      task: 'Escribe git clone https://github.com/equipo/landing.git',
+      task: 'Descarga el proyecto del equipo',
       hint: 'Escribe el comando completo: git clone https://github.com/equipo/landing.git',
       simulateLines: [
         'Cloning into \'landing\'...',
@@ -83,19 +83,17 @@ const content: Record<Locale, Record<string, LessonText>> = {
     '4.3': {
       title: 'Entrar al proyecto',
       module: 'Tu primera tarea real',
-      concept: 'El proyecto se descargó en una carpeta llamada "landing". Necesitas entrar en ella para trabajar.',
+      concept: 'El proyecto se descargó en una carpeta llamada "landing". Necesitas entrar en ella para trabajar.\n\nCuando cd funciona, no muestra ningún mensaje — eso es normal. Silencio = éxito.',
       why: 'Todos los comandos que ejecutes afectan la carpeta donde estás. Si no entras, estarás trabajando en el lugar equivocado.',
-      task: 'Escribe cd landing',
+      task: 'Entra al proyecto que acabas de descargar',
       hint: 'Escribe cd landing',
-      simulateLines: [],
-      simulateDelay: 100,
     },
     '4.4': {
       title: 'Explorar los archivos',
       module: 'Tu primera tarea real',
       concept: 'Antes de cambiar algo, necesitas entender qué hay en el proyecto. Primero mira los archivos, luego lee el que necesitas modificar.',
       why: 'Nunca pidas un cambio a ciegas. Explora primero para saber qué hay y dónde está.',
-      task: '',
+      task: 'Explora el proyecto antes de hacer cambios',
     },
     '4.5': {
       title: 'Crear tu branch',
@@ -103,7 +101,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       concept: 'Nunca trabajes directo en main. Crea una rama (branch) con un nombre descriptivo para tu cambio.',
       analogy: 'Como crear un borrador en Notion antes de publicar. Si algo sale mal, el documento principal no se toca.',
       why: 'Las ramas protegen el código principal. Si algo sale mal, main sigue intacto.',
-      task: 'Escribe git checkout -b cambiar-titulo',
+      task: 'Crea una rama para tu cambio',
       hint: 'Escribe git checkout -b cambiar-titulo',
       simulateLines: [
         'Switched to a new branch \'cambiar-titulo\'',
@@ -122,7 +120,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       module: 'Tu primera tarea real',
       concept: 'El agente hizo el cambio. Ahora necesitas verificar que lo hizo correctamente con git diff.',
       why: 'Siempre revisa antes de guardar. El agente puede equivocarse, y tú eres el responsable.',
-      task: 'Escribe git diff',
+      task: 'Revisa qué cambió el agente',
       hint: 'Escribe git diff para ver qué cambió',
       simulateLines: [
         'diff --git a/src/App.tsx b/src/App.tsx',
@@ -145,7 +143,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       module: 'Tu primera tarea real',
       concept: 'Un commit guarda tus cambios con un mensaje que describe qué hiciste.\n\nBuen mensaje: "update landing title" — corto, claro, dice qué cambió.\nMal mensaje: "cambios" — no dice nada útil.\n\ngit add . selecciona todo. git commit -m "mensaje" lo guarda.',
       why: 'Git no guarda automáticamente. Tú decides qué guardar y cuándo, con un mensaje que explique por qué.',
-      task: '',
+      task: 'Guarda tus cambios con git add y git commit',
     },
     '4.9': {
       title: 'Crear un Pull Request',
@@ -153,7 +151,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       concept: 'El último paso: crear un Pull Request para que tu equipo revise tus cambios antes de aprobarlos.\n\nUsamos la herramienta gh (GitHub CLI) para crearlo desde la terminal.\n\n--title es el título del PR (qué cambiaste). --body es la descripción (por qué lo cambiaste).',
       analogy: 'Como pedir aprobación en Google Docs antes de enviar a los stakeholders. Tu equipo revisa antes de publicar.',
       why: 'Un Pull Request es cómo el equipo revisa tu trabajo. Nadie debería subir cambios sin revisión.',
-      task: 'Escribe gh pr create --title "Update landing title" --body "Changed title to Build something amazing"',
+      task: 'Crea un Pull Request para que tu equipo revise',
       hint: 'Escribe el comando gh pr create con --title y --body',
       simulateLines: [
         '',
@@ -177,14 +175,14 @@ const content: Record<Locale, Record<string, LessonText>> = {
       module: 'Your first real task',
       concept: 'You just joined a team that has a landing page. Your first task: change the title from "Welcome to our app" to "Build something amazing".\n\nThe repo is on GitHub. We\'ll go through the full flow: clone, explore, create branch, ask the agent to make the change, review, save, and create a Pull Request.',
       why: 'This is how real work happens. It doesn\'t matter if it\'s your first day — the flow is always the same.',
-      task: 'Press Enter to continue',
+      task: '',
     },
     '4.2': {
       title: 'Clone the project',
       module: 'Your first real task',
       concept: 'First thing is to bring the project to your machine. git clone downloads a complete copy of the repository.\n\n(This URL is an example. In your real job, your team will give you the repository URL.)',
       why: 'You can\'t work on something you don\'t have. Cloning is always the first step.',
-      task: 'Type git clone https://github.com/equipo/landing.git',
+      task: 'Download the team\'s project',
       hint: 'Type the full command: git clone https://github.com/equipo/landing.git',
       simulateLines: [
         'Cloning into \'landing\'...',
@@ -200,19 +198,17 @@ const content: Record<Locale, Record<string, LessonText>> = {
     '4.3': {
       title: 'Enter the project',
       module: 'Your first real task',
-      concept: 'The project was downloaded into a folder called "landing". You need to enter it to work.',
+      concept: 'The project was downloaded into a folder called "landing". You need to enter it to work.\n\nWhen cd works, it shows no message — that\'s normal. Silence = success.',
       why: 'Every command you run affects the folder you\'re in. If you don\'t enter it, you\'ll be working in the wrong place.',
-      task: 'Type cd landing',
+      task: 'Go into the project you just downloaded',
       hint: 'Type cd landing',
-      simulateLines: [],
-      simulateDelay: 100,
     },
     '4.4': {
       title: 'Explore the files',
       module: 'Your first real task',
       concept: 'Before changing anything, you need to understand what\'s in the project. First look at the files, then read the one you need to modify.',
       why: 'Never ask for a change blindly. Explore first to know what\'s there and where it is.',
-      task: '',
+      task: 'Explore the project before making changes',
     },
     '4.5': {
       title: 'Create your branch',
@@ -220,7 +216,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       concept: 'Never work directly on main. Create a branch with a descriptive name for your change.',
       analogy: 'Like creating a draft in Notion before publishing. If something goes wrong, the main document stays clean.',
       why: 'Branches protect the main code. If something goes wrong, main stays intact.',
-      task: 'Type git checkout -b cambiar-titulo',
+      task: 'Create a branch for your change',
       hint: 'Type git checkout -b cambiar-titulo',
       simulateLines: [
         'Switched to a new branch \'cambiar-titulo\'',
@@ -239,7 +235,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       module: 'Your first real task',
       concept: 'The agent made the change. Now you need to verify it was done correctly with git diff.',
       why: 'Always review before saving. The agent can make mistakes, and you are responsible.',
-      task: 'Type git diff',
+      task: 'Check what the agent changed',
       hint: 'Type git diff to see what changed',
       simulateLines: [
         'diff --git a/src/App.tsx b/src/App.tsx',
@@ -262,7 +258,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       module: 'Your first real task',
       concept: 'A commit saves your changes with a message describing what you did.\n\nGood message: "update landing title" — short, clear, says what changed.\nBad message: "changes" — says nothing useful.\n\ngit add . selects everything. git commit -m "message" saves it.',
       why: 'Git doesn\'t save automatically. You decide what to save and when, with a message that explains why.',
-      task: '',
+      task: 'Save your changes with git add and git commit',
     },
     '4.9': {
       title: 'Create a Pull Request',
@@ -270,7 +266,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       concept: 'The final step: create a Pull Request so your team can review your changes before approving them.\n\nWe use the gh tool (GitHub CLI) to create it from the terminal.\n\n--title is the PR title (what you changed). --body is the description (why you changed it).',
       analogy: 'Like requesting approval in Google Docs before sending to stakeholders. Your team reviews before publishing.',
       why: 'A Pull Request is how the team reviews your work. Nobody should push changes without review.',
-      task: 'Type gh pr create --title "Update landing title" --body "Changed title to Build something amazing"',
+      task: 'Create a Pull Request for your team to review',
       hint: 'Type the gh pr create command with --title and --body',
       simulateLines: [
         '',
@@ -294,14 +290,14 @@ const content: Record<Locale, Record<string, LessonText>> = {
       module: 'Ta première vraie tâche',
       concept: 'Tu viens de rejoindre une équipe qui a une landing page. Ta première tâche : changer le titre de "Welcome to our app" à "Build something amazing".\n\nLe dépôt est sur GitHub. On va faire tout le flux : cloner, explorer, créer une branche, demander le changement à l\'agent, vérifier, sauvegarder et créer un Pull Request.',
       why: 'C\'est comme ça que le vrai travail fonctionne. Peu importe si c\'est ton premier jour — le flux est toujours le même.',
-      task: 'Appuie sur Entrée pour continuer',
+      task: '',
     },
     '4.2': {
       title: 'Cloner le projet',
       module: 'Ta première vraie tâche',
       concept: 'La première chose est d\'amener le projet sur ta machine. git clone télécharge une copie complète du dépôt.\n\n(Cette URL est un exemple. Dans ton travail réel, ton équipe te donnera l\'URL du dépôt.)',
       why: 'Tu ne peux pas travailler sur quelque chose que tu n\'as pas. Cloner est toujours la première étape.',
-      task: 'Tape git clone https://github.com/equipo/landing.git',
+      task: 'Télécharge le projet de l\'équipe',
       hint: 'Tape la commande complète : git clone https://github.com/equipo/landing.git',
       simulateLines: [
         'Cloning into \'landing\'...',
@@ -317,19 +313,17 @@ const content: Record<Locale, Record<string, LessonText>> = {
     '4.3': {
       title: 'Entrer dans le projet',
       module: 'Ta première vraie tâche',
-      concept: 'Le projet a été téléchargé dans un dossier appelé "landing". Tu dois y entrer pour travailler.',
+      concept: 'Le projet a été téléchargé dans un dossier appelé "landing". Tu dois y entrer pour travailler.\n\nQuand cd fonctionne, il n\'affiche aucun message — c\'est normal. Silence = succès.',
       why: 'Chaque commande que tu exécutes affecte le dossier où tu es. Si tu n\'y entres pas, tu travailleras au mauvais endroit.',
-      task: 'Tape cd landing',
+      task: 'Entre dans le projet que tu viens de télécharger',
       hint: 'Tape cd landing',
-      simulateLines: [],
-      simulateDelay: 100,
     },
     '4.4': {
       title: 'Explorer les fichiers',
       module: 'Ta première vraie tâche',
       concept: 'Avant de changer quoi que ce soit, tu dois comprendre ce qu\'il y a dans le projet. D\'abord regarde les fichiers, puis lis celui que tu dois modifier.',
       why: 'Ne demande jamais un changement à l\'aveugle. Explore d\'abord pour savoir ce qu\'il y a et où c\'est.',
-      task: '',
+      task: 'Explore le projet avant de faire des changements',
     },
     '4.5': {
       title: 'Créer ta branche',
@@ -337,7 +331,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       concept: 'Ne travaille jamais directement sur main. Crée une branche avec un nom descriptif pour ton changement.',
       analogy: 'Comme créer un brouillon dans Notion avant de publier. Si quelque chose ne va pas, le document principal reste intact.',
       why: 'Les branches protègent le code principal. Si quelque chose va mal, main reste intact.',
-      task: 'Tape git checkout -b cambiar-titulo',
+      task: 'Crée une branche pour ton changement',
       hint: 'Tape git checkout -b cambiar-titulo',
       simulateLines: [
         'Switched to a new branch \'cambiar-titulo\'',
@@ -356,7 +350,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       module: 'Ta première vraie tâche',
       concept: 'L\'agent a fait le changement. Maintenant tu dois vérifier qu\'il l\'a fait correctement avec git diff.',
       why: 'Vérifie toujours avant de sauvegarder. L\'agent peut se tromper, et c\'est toi le responsable.',
-      task: 'Tape git diff',
+      task: 'Vérifie ce que l\'agent a changé',
       hint: 'Tape git diff pour voir ce qui a changé',
       simulateLines: [
         'diff --git a/src/App.tsx b/src/App.tsx',
@@ -379,7 +373,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       module: 'Ta première vraie tâche',
       concept: 'Un commit sauvegarde tes changements avec un message décrivant ce que tu as fait.\n\nBon message : "update landing title" — court, clair, dit ce qui a changé.\nMauvais message : "changes" — ne dit rien d\'utile.\n\ngit add . sélectionne tout. git commit -m "message" le sauvegarde.',
       why: 'Git ne sauvegarde pas automatiquement. C\'est toi qui décides quoi sauvegarder et quand, avec un message qui explique pourquoi.',
-      task: '',
+      task: 'Sauvegarde tes changements avec git add et git commit',
     },
     '4.9': {
       title: 'Créer un Pull Request',
@@ -387,7 +381,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       concept: 'La dernière étape : créer un Pull Request pour que ton équipe puisse réviser tes changements avant de les approuver.\n\nOn utilise l\'outil gh (GitHub CLI) pour le créer depuis le terminal.\n\n--title est le titre du PR (ce que tu as changé). --body est la description (pourquoi tu l\'as changé).',
       analogy: 'Comme demander une approbation dans Google Docs avant d\'envoyer aux parties prenantes. Ton équipe vérifie avant de publier.',
       why: 'Un Pull Request c\'est comment l\'équipe révise ton travail. Personne ne devrait pousser des changements sans révision.',
-      task: 'Tape gh pr create --title "Update landing title" --body "Changed title to Build something amazing"',
+      task: 'Crée un Pull Request pour que ton équipe vérifie',
       hint: 'Tape la commande gh pr create avec --title et --body',
       simulateLines: [
         '',
@@ -416,21 +410,21 @@ interface QuizQuestionData {
 
 const quizModule4: Record<Locale, QuizQuestionData[]> = {
   es: [
-    { question: '¿Qué es lo primero que haces al empezar una tarea?', options: ['Crear una rama', 'Editar archivos directamente', 'Push a main', 'Borrar el repo'], correct: 0, explanation: 'Siempre creas una rama antes de hacer cambios. Así proteges el código principal.' },
+    { question: '¿Qué haces ANTES de crear una rama en un proyecto nuevo?', options: ['Clonar el proyecto y explorar los archivos', 'Editar archivos directamente', 'Push a main', 'Borrar el repo'], correct: 0, explanation: 'Primero necesitas tener el proyecto (git clone) y entender qué hay (ls, cat). Luego creas tu rama.' },
     { question: '¿Qué comando crea una nueva rama?', options: ['git branch -d', 'git merge', 'git checkout -b', 'git push'], correct: 2, explanation: 'git checkout -b crea una rama nueva y te mueve a ella al mismo tiempo.' },
     { question: 'Antes de pedir algo al agente, ¿qué deberías hacer?', options: ['Push a producción', 'Explorar los archivos para entender el proyecto', 'Borrar ramas viejas', 'Nada'], correct: 1, explanation: 'Explorar primero te permite describir el cambio con precisión.' },
     { question: 'Después de que el agente hace cambios, ¿qué revisas?', options: ['git push', 'git clone', 'git init', 'git diff'], correct: 3, explanation: 'git diff te muestra exactamente qué líneas cambiaron.' },
     { question: '¿Qué es un Pull Request?', options: ['Una forma de borrar archivos', 'Una solicitud para que tu equipo revise tus cambios', 'Un tipo de rama', 'Un lenguaje de programación'], correct: 1, explanation: 'Un Pull Request le dice al equipo: "Hice estos cambios, revísenlos antes de aprobarlos".' },
   ],
   en: [
-    { question: 'What\'s the first thing you do when starting a task?', options: ['Create a branch', 'Edit files directly', 'Push to main', 'Delete the repo'], correct: 0, explanation: 'You always create a branch before making changes. This protects the main code.' },
+    { question: 'What do you do BEFORE creating a branch in a new project?', options: ['Clone the project and explore the files', 'Edit files directly', 'Push to main', 'Delete the repo'], correct: 0, explanation: 'First you need to have the project (git clone) and understand what\'s there (ls, cat). Then you create your branch.' },
     { question: 'What command creates a new branch?', options: ['git branch -d', 'git merge', 'git checkout -b', 'git push'], correct: 2, explanation: 'git checkout -b creates a new branch and moves you to it at the same time.' },
     { question: 'Before asking the agent, what should you do?', options: ['Push to production', 'Explore the files to understand the project', 'Delete old branches', 'Nothing'], correct: 1, explanation: 'Exploring first lets you describe the change precisely.' },
     { question: 'After the agent makes changes, what do you check?', options: ['git push', 'git clone', 'git init', 'git diff'], correct: 3, explanation: 'git diff shows you exactly which lines changed.' },
     { question: 'What is a Pull Request?', options: ['A way to delete files', 'A request for your team to review your changes', 'A type of branch', 'A programming language'], correct: 1, explanation: 'A Pull Request tells the team: "I made these changes, review them before approving".' },
   ],
   fr: [
-    { question: 'Quelle est la première chose que tu fais en commençant une tâche ?', options: ['Créer une branche', 'Modifier les fichiers directement', 'Push sur main', 'Supprimer le dépôt'], correct: 0, explanation: 'Tu crées toujours une branche avant de faire des changements. Ça protège le code principal.' },
+    { question: 'Que fais-tu AVANT de créer une branche dans un nouveau projet ?', options: ['Cloner le projet et explorer les fichiers', 'Modifier les fichiers directement', 'Push sur main', 'Supprimer le dépôt'], correct: 0, explanation: 'D\'abord tu dois avoir le projet (git clone) et comprendre ce qu\'il contient (ls, cat). Ensuite tu crées ta branche.' },
     { question: 'Quelle commande crée une nouvelle branche ?', options: ['git branch -d', 'git merge', 'git checkout -b', 'git push'], correct: 2, explanation: 'git checkout -b crée une nouvelle branche et t\'y déplace en même temps.' },
     { question: 'Avant de demander quelque chose à l\'agent, que dois-tu faire ?', options: ['Push en production', 'Explorer les fichiers pour comprendre le projet', 'Supprimer les vieilles branches', 'Rien'], correct: 1, explanation: 'Explorer d\'abord te permet de décrire le changement avec précision.' },
     { question: 'Après que l\'agent fait des changements, que vérifies-tu ?', options: ['git push', 'git clone', 'git init', 'git diff'], correct: 3, explanation: 'git diff te montre exactement quelles lignes ont changé.' },
@@ -491,6 +485,7 @@ export function getModule4Lessons(locale: Locale): Lesson[] {
     {
       id: '4.2',
       ...c['4.2']!,
+      prompt: '~ $',
       command: 'git clone https://github.com/equipo/landing.git',
       validate: (input: string) => {
         const t = input.trim();
@@ -503,6 +498,7 @@ export function getModule4Lessons(locale: Locale): Lesson[] {
     {
       id: '4.3',
       ...c['4.3']!,
+      prompt: '~/landing $',
       command: 'cd landing',
       validate: (input: string) => {
         const t = input.trim().toLowerCase();
@@ -515,6 +511,7 @@ export function getModule4Lessons(locale: Locale): Lesson[] {
     {
       id: '4.4',
       ...c['4.4']!,
+      prompt: '~/landing $',
       validate: () => ({ valid: true, message: m['4.4'].ok }),
       practiceSteps: practiceModule4_4[locale],
     },
@@ -522,6 +519,7 @@ export function getModule4Lessons(locale: Locale): Lesson[] {
     {
       id: '4.5',
       ...c['4.5']!,
+      prompt: '~/landing $',
       command: 'git checkout -b cambiar-titulo',
       validate: (input: string) => {
         const t = input.trim();
@@ -534,6 +532,7 @@ export function getModule4Lessons(locale: Locale): Lesson[] {
     {
       id: '4.6',
       ...c['4.6']!,
+      prompt: '~/landing $',
       interactive: 'agent-simulation',
       validate: () => ({ valid: true, message: m['4.6'].ok }),
       agentSimulation: {
@@ -593,6 +592,7 @@ export function getModule4Lessons(locale: Locale): Lesson[] {
     {
       id: '4.7',
       ...c['4.7']!,
+      prompt: '~/landing $',
       command: 'git diff',
       validate: (input: string) => {
         const t = input.trim().toLowerCase();
@@ -605,6 +605,7 @@ export function getModule4Lessons(locale: Locale): Lesson[] {
     {
       id: '4.8',
       ...c['4.8']!,
+      prompt: '~/landing $',
       validate: () => ({ valid: true, message: m['4.8'].ok }),
       practiceSteps: practiceModule4_8[locale],
     },
@@ -612,6 +613,7 @@ export function getModule4Lessons(locale: Locale): Lesson[] {
     {
       id: '4.9',
       ...c['4.9']!,
+      prompt: '~/landing $',
       command: 'gh pr create --title "Update landing title" --body "Changed title to Build something amazing"',
       validate: (input: string) => {
         const t = input.trim();

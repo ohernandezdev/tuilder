@@ -23,9 +23,10 @@ interface MultiCommandPromptProps {
   steps: CommandStep[];
   onComplete: () => void;
   onBack?: () => void;
+  prompt?: string;
 }
 
-export function MultiCommandPrompt({ steps, onComplete, onBack }: MultiCommandPromptProps) {
+export function MultiCommandPrompt({ steps, onComplete, onBack, prompt }: MultiCommandPromptProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [value, setValue] = useState('');
   const [error, setError] = useState('');
@@ -112,12 +113,12 @@ export function MultiCommandPrompt({ steps, onComplete, onBack }: MultiCommandPr
       {/* History */}
       {history.map((entry, i) => (
         <Box key={i} flexDirection="column">
-          <Box paddingLeft={2}>
-            <Text color={theme.brand} bold>{'> '}</Text>
+          <Box>
+            <Text color={theme.success}>{(prompt ?? '$') + ' '}</Text>
             <Text color={theme.text}>{entry.command}</Text>
           </Box>
           {entry.output.map((line, j) => (
-            <Box key={j} paddingLeft={4}>{colorize(line, theme)}</Box>
+            <Box key={j} paddingLeft={2}>{colorize(line, theme)}</Box>
           ))}
         </Box>
       ))}
@@ -129,31 +130,31 @@ export function MultiCommandPrompt({ steps, onComplete, onBack }: MultiCommandPr
       ) : step ? (
         <Box flexDirection="column" marginTop={history.length > 0 ? 1 : 0}>
           {/* Step progress */}
-          <Text color={theme.textMuted}>{'  '}{currentStep + 1}/{steps.length}</Text>
+          <Text color={theme.textMuted}>{currentStep + 1}/{steps.length}</Text>
 
           {/* Challenge text */}
-          <Text color={theme.info} bold>{'  '}{step.challenge}</Text>
+          <Text color={theme.info} bold>{step.challenge}</Text>
 
           {/* Input */}
-          <Box paddingLeft={leftPad} marginTop={1}>
-            <Text color={theme.brand} bold>{'> '}</Text>
+          <Box marginLeft={shakeOffset} marginTop={1}>
+            <Text color={theme.success}>{(prompt ?? '$') + ' '}</Text>
             <TextInput value={value} onChange={setValue} onSubmit={handleSubmit} />
           </Box>
 
           {/* Error — show what they typed */}
           {error && error !== ui().writeSomethingFirst && (
-            <Text color={theme.warning}>{'    '}{error}: {ui().commandNotRecognized}</Text>
+            <Text color={theme.warning}>{'  '}{error}: {ui().commandNotRecognized}</Text>
           )}
           {error === ui().writeSomethingFirst && (
-            <Text color={theme.warning}>{'    '}{error}</Text>
+            <Text color={theme.warning}>{'  '}{error}</Text>
           )}
 
           {/* Progressive hints */}
           {showHint1 && step.hint1 && !showHint2 && (
-            <Text color={theme.textMuted}>{'    💡 '}{step.hint1}</Text>
+            <Text color={theme.textMuted}>{'  💡 '}{step.hint1}</Text>
           )}
           {showHint2 && step.hint2 && (
-            <Text color={theme.commandHighlight}>{'    → '}{step.hint2}</Text>
+            <Text color={theme.commandHighlight}>{'  → '}{step.hint2}</Text>
           )}
         </Box>
       ) : null}

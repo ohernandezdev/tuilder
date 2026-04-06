@@ -43,6 +43,12 @@ export interface Lesson {
     explanation: string;
   };
 
+  // Terminal prompt context, e.g. "~/mi-app $"
+  prompt?: string;
+
+  // Lines shown inside terminal BEFORE the input (e.g. previous commands for context)
+  prefillLines?: string[];
+
   // Multi-command practice — challenge-based, user figures out the command
   practiceSteps?: { challenge: string; command: string; acceptPattern?: string; output: string[]; hint1?: string; hint2?: string }[];
 

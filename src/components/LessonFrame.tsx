@@ -17,6 +17,33 @@ import { AgentSimulation } from './AgentSimulation.js';
 // Only 2 phases now: learn the concept, then do the task (with inline output)
 type Phase = 'learn' | 'task';
 
+// Terminal window frame — wraps interactive content to look like a real terminal
+function TerminalWindow({ title, children }: { title?: string; children: React.ReactNode }) {
+  const windowTitle = title ?? 'Terminal';
+  return (
+    <Box flexDirection="column">
+      {/* Title bar */}
+      <Box>
+        <Text color={theme.textGhost}>{'  '}</Text>
+        <Text color={theme.error}>{'● '}</Text>
+        <Text color={theme.warning}>{'● '}</Text>
+        <Text color={theme.success}>{'● '}</Text>
+        <Text color={theme.textMuted}>{' '}{windowTitle}</Text>
+      </Box>
+      {/* Terminal body */}
+      <Box
+        flexDirection="column"
+        borderStyle="round"
+        borderColor={theme.textGhost}
+        paddingX={1}
+        paddingY={0}
+      >
+        {children}
+      </Box>
+    </Box>
+  );
+}
+
 interface LessonFrameProps {
   lesson: Lesson;
   onComplete: () => void;
@@ -154,26 +181,33 @@ export function LessonFrame({ lesson, onComplete, onBack, userName }: LessonFram
             /* Multi-command practice */
             <>
               <Text color={theme.brand} bold>{'  '}{ui().yourTurn}</Text>
-              <Text color={theme.text}>{t(lesson.task)}</Text>
-              <MultiCommandPrompt
-                steps={lesson.practiceSteps}
-                onComplete={finish}
-                onBack={goBack}
-              />
+              {lesson.task ? <Text color={theme.text}>{'  '}{t(lesson.task)}</Text> : null}
+              <TerminalWindow title={lesson.prompt ?? 'Terminal'}>
+                <MultiCommandPrompt
+                  steps={lesson.practiceSteps}
+                  onComplete={finish}
+                  onBack={goBack}
+                  prompt={lesson.prompt}
+                />
+              </TerminalWindow>
             </>
           ) : lesson.command ? (
             /* Command input with inline output */
             <>
               <Text color={theme.brand} bold>{'  '}{ui().yourTurn}</Text>
-              <Text color={theme.text}>{t(lesson.task)}</Text>
-              <CommandPrompt
-                expectedCommand={lesson.command}
-                onComplete={finish}
-                hint={lesson.hint}
-                onBack={goBack}
-                simulateLines={lesson.simulate?.lines}
-                simulateDelay={lesson.simulate?.delay}
-              />
+              {lesson.task ? <Text color={theme.text}>{'  '}{t(lesson.task)}</Text> : null}
+              <TerminalWindow title={lesson.prompt ?? 'Terminal'}>
+                <CommandPrompt
+                  expectedCommand={lesson.command}
+                  onComplete={finish}
+                  hint={lesson.hint}
+                  onBack={goBack}
+                  simulateLines={lesson.simulate?.lines}
+                  simulateDelay={lesson.simulate?.delay}
+                  prompt={lesson.prompt}
+                  prefillLines={lesson.prefillLines}
+                />
+              </TerminalWindow>
             </>
           ) : lesson.simulate ? (
             /* No command, but has simulate output (e.g. recap screens) */

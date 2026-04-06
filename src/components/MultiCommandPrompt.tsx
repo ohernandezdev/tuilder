@@ -128,6 +128,9 @@ export function MultiCommandPrompt({ steps, onComplete, onBack }: MultiCommandPr
         </Box>
       ) : step ? (
         <Box flexDirection="column" marginTop={history.length > 0 ? 1 : 0}>
+          {/* Step progress */}
+          <Text color={theme.textMuted}>{'  '}{currentStep + 1}/{steps.length}</Text>
+
           {/* Challenge text */}
           <Text color={theme.info} bold>{'  '}{step.challenge}</Text>
 

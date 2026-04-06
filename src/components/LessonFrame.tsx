@@ -114,7 +114,9 @@ export function LessonFrame({ lesson, onComplete, onBack, userName }: LessonFram
       {/* ── LEARN ── */}
       {currentPhase === 'learn' && (
         <Box flexDirection="column" gap={spacing.sm}>
-          <Text color={theme.text}>{t(lesson.concept)}</Text>
+          {lesson.concept.split('\n\n').map((paragraph, i) => (
+            <Text key={i} color={theme.text}>{t(paragraph)}</Text>
+          ))}
 
           {lesson.analogy && (
             <Box borderStyle="round" borderColor={theme.borderDim} paddingX={1}>

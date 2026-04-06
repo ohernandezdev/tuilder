@@ -71,6 +71,15 @@ export const es: UIStrings = {
   streakDays: '{n}d',
   streakWelcome: 'Llevas {n} días seguidos',
 
+  // Main menu
+  menuContinue: 'Continuar',
+  menuNewGame: 'Empezar de nuevo',
+  menuModules: 'Ir a un módulo',
+  menuChangeLang: 'Cambiar idioma',
+  menuCertificate: 'Ver certificado',
+  menuConfirmReset: '¿Seguro? Se borrará todo tu progreso. Enter = sí, Esc = no',
+  menuBack: 'Volver al menú',
+
   approve: 'Aprobar',
   reject: 'Rechazar',
   correct: 'correcto',

@@ -80,6 +80,15 @@ export interface UIStrings {
   correct: string;
   quizResult: string; // "{n}/{total} correct"
 
+  // Main menu
+  menuContinue: string;
+  menuNewGame: string;
+  menuModules: string;
+  menuChangeLang: string;
+  menuCertificate: string;
+  menuConfirmReset: string;
+  menuBack: string;
+
   // Misc
   commandNotRecognized: string;
   select: string;

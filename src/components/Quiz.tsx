@@ -95,7 +95,7 @@ export function Quiz({ questions, onComplete }: QuizProps) {
   return (
     <Box flexDirection="column" paddingX={spacing.md} gap={spacing.sm}>
       {/* Progress */}
-      <Text color={theme.textMuted}>{questionIndex + 1}/{questions.length}</Text>
+      <Text color={theme.textSecondary}>{questionIndex + 1} <Text color={theme.textMuted}>/ {questions.length}</Text></Text>
 
       {/* Question */}
       <Text color={theme.text} bold>{current.question}</Text>

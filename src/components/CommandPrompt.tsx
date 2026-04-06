@@ -131,12 +131,14 @@ export function CommandPrompt({ expectedCommand, onComplete, hint, onBack, simul
         <Text color={theme.info}>{'    '}{hint}</Text>
       )}
 
-      <Text color={theme.textMuted}>
-        {'    '}
-        {ui().writeAndEnter.split('{cmd}')[0]}
-        <Text color={theme.commandHighlight} bold>{expectedCommand}</Text>
-        {ui().writeAndEnter.split('{cmd}')[1] ?? ''}
-      </Text>
+      {(attempts >= 2 || showHint) && (
+        <Text color={theme.textMuted}>
+          {'    '}
+          {ui().writeAndEnter.split('{cmd}')[0]}
+          <Text color={theme.commandHighlight} bold>{expectedCommand}</Text>
+          {ui().writeAndEnter.split('{cmd}')[1] ?? ''}
+        </Text>
+      )}
     </Box>
   );
 }

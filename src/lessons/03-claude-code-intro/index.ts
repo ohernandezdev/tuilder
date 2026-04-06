@@ -73,7 +73,7 @@ const msg = {
 const agentSims: Record<Locale, Record<string, AgentSimText>> = {
   es: {
     '3.4': {
-      scenario: 'Hay un botón en src/Button.tsx que dice "Click me". Quieres que diga "Empezar".',
+      scenario: 'En la página hay un botón que dice "Click me". Quieres que diga "Empezar". El agente encontrará el archivo correcto.',
       promptHint: 'Intenta pedir que cambie el texto del botón',
       agentResponse: ['Leyendo src/Button.tsx...', 'Voy a cambiar el texto del botón.', 'Escribiendo cambios...'],
       diffLines: ['--- a/src/Button.tsx', '+++ b/src/Button.tsx', '-  <button>Click me</button>', '+  <button>Empezar</button>'],
@@ -103,7 +103,7 @@ const agentSims: Record<Locale, Record<string, AgentSimText>> = {
   },
   en: {
     '3.4': {
-      scenario: 'There\'s a button in src/Button.tsx that says "Click me". You want it to say "Get started".',
+      scenario: 'On the page there\'s a button that says "Click me". You want it to say "Get started". The agent will find the right file.',
       promptHint: 'Try asking to change the button text',
       agentResponse: ['Reading src/Button.tsx...', 'I\'ll change the button text.', 'Writing changes...'],
       diffLines: ['--- a/src/Button.tsx', '+++ b/src/Button.tsx', '-  <button>Click me</button>', '+  <button>Get started</button>'],
@@ -133,7 +133,7 @@ const agentSims: Record<Locale, Record<string, AgentSimText>> = {
   },
   fr: {
     '3.4': {
-      scenario: 'Il y a un bouton dans src/Button.tsx qui dit "Click me". Tu veux qu\'il dise "Commencer".',
+      scenario: 'Sur la page il y a un bouton qui dit "Click me". Tu veux qu\'il dise "Commencer". L\'agent trouvera le bon fichier.',
       promptHint: 'Essaie de demander de changer le texte du bouton',
       agentResponse: ['Lecture de src/Button.tsx...', 'Je vais changer le texte du bouton.', 'Écriture des changements...'],
       diffLines: ['--- a/src/Button.tsx', '+++ b/src/Button.tsx', '-  <button>Click me</button>', '+  <button>Commencer</button>'],
@@ -186,7 +186,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
     '3.3': {
       title: 'Cómo hablarle al agente',
       module: 'Tu Primer Agente de AI',
-      concept: 'Sé específico. Da contexto. Di qué archivo.\n\nBuen prompt:\n  "En src/App.tsx, cambia el título de \'Hola\' a \'Bienvenido\'"\n\nMal prompt:\n  "hazlo mejor"\n\nEntre más contexto, mejor resultado.',
+      concept: 'Sé específico. Da contexto. Di qué archivo.\n\nBuen prompt:\n  "En src/App.tsx, cambia el título de \'Hola\' a \'Bienvenido\'"\n\nMal prompt:\n  "hazlo mejor"\n\nEntre más contexto, mejor resultado.\n\nEl agente lee tu código. Si dices "cambia el color del botón", encuentra 10 botones. Si dices "en src/Button.tsx, cambia el color", cambia el correcto.',
       why: 'La calidad de tu instrucción = la calidad del resultado.',
       task: 'Presiona Enter para continuar',
       simulateLines: [
@@ -203,14 +203,14 @@ const content: Record<Locale, Record<string, LessonText>> = {
       module: 'Tu Primer Agente de AI',
       concept: 'Es hora de dar tu primera instrucción a un agente de AI. Vas a ver un escenario y tendrás que escribir qué le pedirías.\n\nEl agente te mostrará lo que haría y tú decidirás si aprobar o rechazar.',
       why: 'La práctica es la mejor forma de aprender. Equivocarse aquí es gratis.',
-      task: 'Escribe tu instrucción para el agente',
+      task: 'Escribe tu instrucción al agente en lenguaje natural, como si hablaras con una persona',
     },
     '3.5': {
       title: 'Revisar el diff',
       module: 'Tu Primer Agente de AI',
       concept: 'Antes de aprobar cualquier cambio, SIEMPRE revisa el diff. Verifica:\n\n  1. ¿El archivo correcto fue modificado?\n  2. ¿Los cambios son lo que pediste?\n  3. ¿No se cambió nada extra?\n\nEn un diff: las líneas con "-" se eliminaron. Las líneas con "+" se agregaron. Así puedes ver exactamente qué cambió.',
       why: 'El diff es tu escudo. Nunca apruebes sin leerlo.',
-      task: 'Revisa el diff y decide si aprobarlo',
+      task: 'Revisa el diff: ¿es el archivo correcto? ¿Son los cambios que pediste? Luego aprueba o rechaza',
     },
     '3.6': {
       title: 'Cuándo rechazar',
@@ -245,7 +245,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       module: 'Tu Primer Agente de AI',
       concept: 'Vamos a simular una sesión completa con un agente. Tú das las instrucciones.',
       why: 'La repetición construye confianza.',
-      task: '',
+      task: 'Completa los 3 pasos: da una instrucción, revisa el resultado, guarda los cambios',
     },
     '3.11': {
       title: 'Quiz — Tu Primer Agente de AI',
@@ -274,7 +274,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
     '3.3': {
       title: 'How to talk to the agent',
       module: 'Your First AI Agent',
-      concept: 'Be specific. Give context. Say which file.\n\nGood prompt:\n  "In src/App.tsx, change the title from \'Hello\' to \'Welcome\'"\n\nBad prompt:\n  "make it better"\n\nThe more context, the better the result.',
+      concept: 'Be specific. Give context. Say which file.\n\nGood prompt:\n  "In src/App.tsx, change the title from \'Hello\' to \'Welcome\'"\n\nBad prompt:\n  "make it better"\n\nThe more context, the better the result.\n\nThe agent reads your code. If you say "change the button color," it finds 10 buttons. If you say "in src/Button.tsx, change the color," it changes the right one.',
       why: 'The quality of your instruction = the quality of the result.',
       task: 'Press Enter to continue',
       simulateLines: [
@@ -291,14 +291,14 @@ const content: Record<Locale, Record<string, LessonText>> = {
       module: 'Your First AI Agent',
       concept: 'It\'s time to give your first instruction to an AI agent. You\'ll see a scenario and you\'ll have to write what you\'d ask.\n\nThe agent will show you what it would do and you\'ll decide whether to approve or reject.',
       why: 'Practice is the best way to learn. Making mistakes here is free.',
-      task: 'Write your instruction for the agent',
+      task: 'Write your instruction to the agent in natural language, like talking to a person',
     },
     '3.5': {
       title: 'Review the diff',
       module: 'Your First AI Agent',
       concept: 'Before approving any change, ALWAYS review the diff. Check:\n\n  1. Was the correct file modified?\n  2. Are the changes what you asked for?\n  3. Was nothing extra changed?\n\nIn a diff: lines starting with "-" were removed. Lines with "+" were added. This shows you exactly what changed.',
       why: 'The diff is your shield. Never approve without reading it.',
-      task: 'Review the diff and decide whether to approve',
+      task: 'Review the diff: is it the right file? Are these the changes you asked for? Then approve or reject',
     },
     '3.6': {
       title: 'When to reject',
@@ -333,7 +333,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       module: 'Your First AI Agent',
       concept: 'Let\'s simulate a full session with an agent. You give the instructions.',
       why: 'Repetition builds confidence.',
-      task: '',
+      task: 'Complete the 3 steps: give an instruction, review the result, save the changes',
     },
     '3.11': {
       title: 'Quiz — Your First AI Agent',
@@ -362,7 +362,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
     '3.3': {
       title: 'Comment parler à l\'agent',
       module: 'Ton Premier Agent IA',
-      concept: 'Sois spécifique. Donne du contexte. Dis quel fichier.\n\nBon prompt :\n  "Dans src/App.tsx, change le titre de \'Bonjour\' à \'Bienvenue\'"\n\nMauvais prompt :\n  "améliore ça"\n\nPlus tu donnes de contexte, meilleur sera le résultat.',
+      concept: 'Sois spécifique. Donne du contexte. Dis quel fichier.\n\nBon prompt :\n  "Dans src/App.tsx, change le titre de \'Bonjour\' à \'Bienvenue\'"\n\nMauvais prompt :\n  "améliore ça"\n\nPlus tu donnes de contexte, meilleur sera le résultat.\n\nL\'agent lit ton code. Si tu dis "change la couleur du bouton", il trouve 10 boutons. Si tu dis "dans src/Button.tsx, change la couleur", il change le bon.',
       why: 'La qualité de ton instruction = la qualité du résultat.',
       task: 'Appuie sur Entrée pour continuer',
       simulateLines: [
@@ -379,14 +379,14 @@ const content: Record<Locale, Record<string, LessonText>> = {
       module: 'Ton Premier Agent IA',
       concept: 'C\'est le moment de donner ta première instruction à un agent IA. Tu vas voir un scénario et tu devras écrire ce que tu demanderais.\n\nL\'agent te montrera ce qu\'il ferait et tu décideras d\'approuver ou de rejeter.',
       why: 'La pratique est la meilleure façon d\'apprendre. Se tromper ici est gratuit.',
-      task: 'Écris ton instruction pour l\'agent',
+      task: 'Écris ton instruction à l\'agent en langage naturel, comme si tu parlais à une personne',
     },
     '3.5': {
       title: 'Vérifier le diff',
       module: 'Ton Premier Agent IA',
       concept: 'Avant d\'approuver un changement, TOUJOURS vérifier le diff. Vérifie :\n\n  1. Le bon fichier a-t-il été modifié ?\n  2. Les changements sont-ils ce que tu as demandé ?\n  3. Rien d\'extra n\'a été changé ?\n\nDans un diff : les lignes commençant par "-" ont été supprimées. Celles avec "+" ont été ajoutées. Tu vois exactement ce qui a changé.',
       why: 'Le diff est ton bouclier. N\'approuve jamais sans le lire.',
-      task: 'Vérifie le diff et décide si tu approuves',
+      task: 'Vérifie le diff : est-ce le bon fichier ? Les changements correspondent-ils à ta demande ? Puis approuve ou rejette',
     },
     '3.6': {
       title: 'Quand rejeter',
@@ -421,7 +421,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       module: 'Ton Premier Agent IA',
       concept: 'Simulons une session complète avec un agent. Tu donnes les instructions.',
       why: 'La répétition construit la confiance.',
-      task: '',
+      task: 'Complète les 3 étapes : donne une instruction, vérifie le résultat, sauvegarde les changements',
     },
     '3.11': {
       title: 'Quiz — Ton Premier Agent IA',
@@ -549,7 +549,7 @@ export function getModule3Lessons(locale: Locale): Lesson[] {
       agentSimulation: {
         scenario: a['3.5']!.scenario,
         promptHint: a['3.5']!.promptHint,
-        acceptedPatterns: ['color', 'background', 'card', 'blue|azul|bleu'],
+        acceptedPatterns: ['color|colour|background|card|cambiar|change|changer', 'blue|azul|bleu|gray|gris'],
         agentResponse: a['3.5']!.agentResponse,
         diffLines: a['3.5']!.diffLines,
         approveIsCorrect: true,
@@ -587,7 +587,7 @@ export function getModule3Lessons(locale: Locale): Lesson[] {
       agentSimulation: {
         scenario: a['3.8']!.scenario,
         promptHint: a['3.8']!.promptHint,
-        acceptedPatterns: ['title', 'bold|negritas|gras', 'change|cambiar|changer'],
+        acceptedPatterns: ['title|titulo|titre|bold|negritas|gras', 'change|cambiar|changer|make|hacer|mettre'],
         agentResponse: a['3.8']!.agentResponse,
         diffLines: a['3.8']!.diffLines,
         approveIsCorrect: true,

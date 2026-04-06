@@ -4,7 +4,7 @@ import TextInput from 'ink-text-input';
 import { theme, spacing } from './theme.js';
 import { getAllLessons } from './lessons/index.js';
 import { type Locale, setLocale, getLocale, ui, fmt } from './i18n/index.js';
-import { loadProgress, saveProgress, completeLesson, addXp, updateStreak } from './store/progress.js';
+import { loadProgress, saveProgress, resetProgress, completeLesson, addXp, updateStreak } from './store/progress.js';
 import { LessonFrame } from './components/LessonFrame.js';
 import { ProgressBar } from './components/ProgressBar.js';
 import { XpBar } from './components/XpBar.js';
@@ -15,7 +15,7 @@ import { Logo } from './components/Logo.js';
 import { playSound } from './utils/sound.js';
 import { getLevel, XP_PER_LESSON, type Level } from './utils/xp.js';
 
-type Screen = 'splash' | 'lang' | 'welcome' | 'lesson' | 'complete';
+type Screen = 'splash' | 'lang' | 'welcome' | 'menu' | 'modules' | 'confirmReset' | 'lesson' | 'complete';
 
 interface AppProps {
   startLesson?: string;
@@ -25,6 +25,16 @@ const LANG_OPTIONS: { locale: Locale; label: string }[] = [
   { locale: 'es', label: 'Español' },
   { locale: 'en', label: 'English' },
   { locale: 'fr', label: 'Français' },
+];
+
+const MODULE_INFO = [
+  { id: '0', startLesson: '0.1' },
+  { id: '1', startLesson: '1.1' },
+  { id: '2', startLesson: '2.1' },
+  { id: '3', startLesson: '3.1' },
+  { id: '4', startLesson: '4.1' },
+  { id: '5', startLesson: '5.1' },
+  { id: '6', startLesson: '6.1' },
 ];
 
 function getInitialIndex(lessons: ReturnType<typeof getAllLessons>, startLesson?: string, completedIds: string[] = []): number {
@@ -38,7 +48,7 @@ function getInitialIndex(lessons: ReturnType<typeof getAllLessons>, startLesson?
   return lessons.length;
 }
 
-// ── Language picker (no logo — parent shows it) ──
+// ── Language picker ──
 function LanguagePicker({ onSelect }: { onSelect: (locale: Locale) => void }) {
   const [selected, setSelected] = useState(0);
 
@@ -66,14 +76,105 @@ function LanguagePicker({ onSelect }: { onSelect: (locale: Locale) => void }) {
   );
 }
 
+// ── Main Menu ──
+function MainMenu({ hasProgress, isGraduated, onSelect }: {
+  hasProgress: boolean;
+  isGraduated: boolean;
+  onSelect: (action: 'continue' | 'newgame' | 'modules' | 'lang' | 'cert') => void;
+}) {
+  const options: { key: string; label: string; action: 'continue' | 'newgame' | 'modules' | 'lang' | 'cert' }[] = [];
+  if (hasProgress) options.push({ key: 'continue', label: ui().menuContinue, action: 'continue' });
+  options.push({ key: 'newgame', label: ui().menuNewGame, action: 'newgame' });
+  if (hasProgress) options.push({ key: 'modules', label: ui().menuModules, action: 'modules' });
+  options.push({ key: 'lang', label: ui().menuChangeLang, action: 'lang' });
+  if (isGraduated) options.push({ key: 'cert', label: ui().menuCertificate, action: 'cert' });
+
+  const [selected, setSelected] = useState(0);
+
+  useInput((_input, key) => {
+    if (key.upArrow && selected > 0) setSelected(prev => prev - 1);
+    if (key.downArrow && selected < options.length - 1) setSelected(prev => prev + 1);
+    if (key.return) {
+      playSound('advance');
+      onSelect(options[selected]!.action);
+    }
+  });
+
+  return (
+    <Box flexDirection="column" gap={spacing.sm}>
+      {options.map((opt, i) => (
+        <Text key={opt.key} color={i === selected ? theme.brand : theme.textSecondary}>
+          {i === selected ? '  ▸ ' : '    '}{opt.label}
+        </Text>
+      ))}
+      <Text>{' '}</Text>
+      <Text color={theme.textMuted}>{'  ↑↓ + Enter'}</Text>
+    </Box>
+  );
+}
+
+// ── Module Picker ──
+function ModulePicker({ lessons, completedLessons, onSelect, onBack }: {
+  lessons: ReturnType<typeof getAllLessons>;
+  completedLessons: string[];
+  onSelect: (lessonId: string) => void;
+  onBack: () => void;
+}) {
+  const modules = useMemo(() => {
+    const map = new Map<string, { name: string; firstId: string; total: number; completed: number }>();
+    for (const l of lessons) {
+      const modId = l.id.split('.')[0]!;
+      if (!map.has(modId)) {
+        map.set(modId, { name: l.module, firstId: l.id, total: 0, completed: 0 });
+      }
+      const m = map.get(modId)!;
+      m.total++;
+      if (completedLessons.includes(l.id)) m.completed++;
+    }
+    return Array.from(map.entries()).map(([id, info]) => ({ id, ...info }));
+  }, [lessons, completedLessons]);
+
+  const [selected, setSelected] = useState(0);
+
+  useInput((_input, key) => {
+    if (key.upArrow && selected > 0) setSelected(prev => prev - 1);
+    if (key.downArrow && selected < modules.length - 1) setSelected(prev => prev + 1);
+    if (key.return) {
+      playSound('advance');
+      onSelect(modules[selected]!.firstId);
+    }
+    if (key.escape) onBack();
+  });
+
+  return (
+    <Box flexDirection="column" gap={spacing.sm}>
+      {modules.map((mod, i) => {
+        const done = mod.completed === mod.total;
+        const progress = `${mod.completed}/${mod.total}`;
+        return (
+          <Text key={mod.id} color={i === selected ? theme.brand : theme.textSecondary}>
+            {i === selected ? '  ▸ ' : '    '}
+            <Text color={done ? theme.success : (i === selected ? theme.brand : theme.textSecondary)}>
+              {done ? '✓ ' : '  '}{mod.name}
+            </Text>
+            <Text color={theme.textMuted}> ({progress})</Text>
+          </Text>
+        );
+      })}
+      <Text>{' '}</Text>
+      <Text color={theme.textMuted}>{'  ↑↓ + Enter    '}{ui().escToGoBack}</Text>
+    </Box>
+  );
+}
+
 // ── Main App ─────────────────────────────────────
 export function App({ startLesson }: AppProps) {
   const [progress, setProgress] = useState(() => loadProgress());
   const [streakInfo] = useState(() => updateStreak());
   const [name, setName] = useState('');
 
-  // Set locale once from saved progress (not on every render)
-  const [localeSet] = useState(() => {
+  // Set locale once from saved progress
+  const [_localeSet] = useState(() => {
     if (progress.locale) setLocale(progress.locale as Locale);
     return true;
   });
@@ -81,7 +182,10 @@ export function App({ startLesson }: AppProps) {
   const allLessons = useMemo(() => getAllLessons(getLocale()), [progress.locale]);
   const needsLang = !progress.locale;
   const needsName = !progress.userName;
+  const hasProgress = progress.completedLessons.length > 0;
+  const isGraduated = !!progress.graduatedAt;
 
+  // If startLesson is provided via CLI, skip menu
   const [screen, setScreen] = useState<Screen>('splash');
   const [lessonIndex, setLessonIndex] = useState(() =>
     getInitialIndex(allLessons, startLesson, progress.completedLessons)
@@ -92,19 +196,28 @@ export function App({ startLesson }: AppProps) {
   const currentLesson = allLessons[lessonIndex];
 
   const handleSplashDone = useCallback(() => {
-    // Compute next screen at call time, not at mount time
+    if (startLesson) {
+      // CLI --lesson flag: skip menu, go straight to lesson
+      if (!progress.locale) { setScreen('lang'); return; }
+      if (!progress.userName) { setScreen('welcome'); return; }
+      setScreen('lesson');
+      return;
+    }
     if (!progress.locale) { setScreen('lang'); return; }
     if (!progress.userName) { setScreen('welcome'); return; }
-    if (getInitialIndex(allLessons, startLesson, progress.completedLessons) >= allLessons.length) { setScreen('complete'); return; }
-    setScreen('lesson');
-  }, [progress, allLessons, startLesson]);
+    setScreen('menu');
+  }, [progress, startLesson]);
 
   const handleLangSelect = (locale: Locale) => {
     setLocale(locale);
     const updated = { ...progress, locale };
     saveProgress(updated);
     setProgress(updated);
-    setScreen(needsName ? 'welcome' : 'lesson');
+    if (needsName) {
+      setScreen('welcome');
+    } else {
+      setScreen('menu');
+    }
   };
 
   const handleNameSubmit = (value: string) => {
@@ -114,8 +227,49 @@ export function App({ startLesson }: AppProps) {
     saveProgress(updated);
     setProgress(updated);
     playSound('advance');
-    setScreen('lesson');
+    setScreen('menu');
   };
+
+  const handleMenuSelect = (action: 'continue' | 'newgame' | 'modules' | 'lang' | 'cert') => {
+    if (action === 'continue') {
+      const idx = getInitialIndex(allLessons, undefined, progress.completedLessons);
+      if (idx >= allLessons.length) {
+        setScreen('complete');
+      } else {
+        setLessonIndex(idx);
+        setScreen('lesson');
+      }
+    } else if (action === 'newgame') {
+      setScreen('confirmReset');
+    } else if (action === 'modules') {
+      setScreen('modules');
+    } else if (action === 'lang') {
+      setScreen('lang');
+    } else if (action === 'cert') {
+      setScreen('complete');
+    }
+  };
+
+  const handleModuleSelect = (lessonId: string) => {
+    const idx = allLessons.findIndex(l => l.id === lessonId);
+    if (idx !== -1) {
+      setLessonIndex(idx);
+      setScreen('lesson');
+    }
+  };
+
+  const handleConfirmReset = useCallback(() => {
+    resetProgress();
+    const fresh = loadProgress();
+    // Keep locale and name
+    fresh.locale = progress.locale;
+    fresh.userName = progress.userName;
+    saveProgress(fresh);
+    setProgress(fresh);
+    setLessonIndex(0);
+    playSound('advance');
+    setScreen('menu');
+  }, [progress.locale, progress.userName]);
 
   const handleLessonComplete = useCallback(() => {
     if (!currentLesson) return;
@@ -154,7 +308,20 @@ export function App({ startLesson }: AppProps) {
     }
   }, [pendingNextIndex]);
 
-  const isMenuScreen = screen === 'lang' || screen === 'welcome' || screen === 'complete';
+  const isMenuScreen = screen === 'lang' || screen === 'welcome' || screen === 'complete' || screen === 'menu' || screen === 'modules' || screen === 'confirmReset';
+
+  // Confirm reset screen input
+  const ConfirmReset = () => {
+    useInput((_input, key) => {
+      if (key.return) handleConfirmReset();
+      if (key.escape) setScreen('menu');
+    });
+    return (
+      <Box flexDirection="column" gap={spacing.sm}>
+        <Text color={theme.warning} bold>{'  '}{ui().menuConfirmReset}</Text>
+      </Box>
+    );
+  };
 
   return (
     <Box flexDirection="column" minHeight={16}>
@@ -167,12 +334,29 @@ export function App({ startLesson }: AppProps) {
       {/* ── MENU SCREENS: logo header + content ── */}
       {isMenuScreen && (
         <Box flexDirection="column">
-          {/* ASCII logo as persistent header */}
           <Box paddingX={spacing.md} paddingTop={1} paddingBottom={1} flexDirection="column">
             <Logo />
+            {progress.userName && (
+              <Box paddingTop={1} gap={2}>
+                <Text color={theme.textMuted}>{progress.userName}</Text>
+                {hasProgress && (
+                  <>
+                    <Text color={theme.textGhost}>|</Text>
+                    <XpBar xp={progress.xp ?? 0} locale={getLocale()} />
+                    <Text color={theme.textGhost}>|</Text>
+                    <ProgressBar current={progress.completedLessons.length} total={allLessons.length} />
+                  </>
+                )}
+                {streakInfo.streak >= 2 && (
+                  <>
+                    <Text color={theme.textGhost}>|</Text>
+                    <StreakBadge streak={streakInfo.streak} />
+                  </>
+                )}
+              </Box>
+            )}
           </Box>
 
-          {/* Content below logo */}
           <Box flexDirection="column" paddingX={spacing.md}>
             {screen === 'lang' && (
               <LanguagePicker onSelect={handleLangSelect} />
@@ -191,6 +375,25 @@ export function App({ startLesson }: AppProps) {
                 <Text color={theme.textMuted}>{'  '}{ui().welcomeNameHint}</Text>
               </Box>
             )}
+
+            {screen === 'menu' && (
+              <MainMenu
+                hasProgress={hasProgress}
+                isGraduated={isGraduated}
+                onSelect={handleMenuSelect}
+              />
+            )}
+
+            {screen === 'modules' && (
+              <ModulePicker
+                lessons={allLessons}
+                completedLessons={progress.completedLessons}
+                onSelect={handleModuleSelect}
+                onBack={() => setScreen('menu')}
+              />
+            )}
+
+            {screen === 'confirmReset' && <ConfirmReset />}
 
             {screen === 'complete' && (
               <Box flexDirection="column" gap={spacing.sm}>
@@ -213,7 +416,6 @@ export function App({ startLesson }: AppProps) {
       {/* ── LESSON SCREEN: compact header + lesson ── */}
       {screen === 'lesson' && (
         <Box flexDirection="column">
-          {/* Compact header bar */}
           <Box
             borderStyle="single"
             borderColor={theme.border}
@@ -243,21 +445,18 @@ export function App({ startLesson }: AppProps) {
             )}
           </Box>
 
-          {/* Level up celebration */}
           {levelUpInfo && (
             <Box paddingY={1}>
               <LevelUp level={levelUpInfo} locale={getLocale()} onDone={handleLevelUpDone} />
             </Box>
           )}
 
-          {/* Streak welcome */}
           {streakInfo.isNewDay && streakInfo.streak >= 2 && !levelUpInfo && (
             <Box paddingX={spacing.md} paddingTop={1}>
               <Text color={theme.warning}>{fmt(ui().streakWelcome, { n: String(streakInfo.streak) })}</Text>
             </Box>
           )}
 
-          {/* Lesson content */}
           {currentLesson && !levelUpInfo && (
             <Box paddingTop={1}>
               <LessonFrame

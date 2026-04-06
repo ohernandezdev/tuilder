@@ -101,6 +101,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       title: 'Crear tu branch',
       module: 'Tu primera tarea real',
       concept: 'Nunca trabajes directo en main. Crea una rama (branch) con un nombre descriptivo para tu cambio.',
+      analogy: 'Como crear un borrador en Notion antes de publicar. Si algo sale mal, el documento principal no se toca.',
       why: 'Las ramas protegen el código principal. Si algo sale mal, main sigue intacto.',
       task: 'Escribe git checkout -b cambiar-titulo',
       hint: 'Escribe git checkout -b cambiar-titulo',
@@ -142,7 +143,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
     '4.8': {
       title: 'Guardar tus cambios',
       module: 'Tu primera tarea real',
-      concept: 'El cambio está verificado. Ahora necesitas guardarlo en Git: primero seleccionar los archivos (git add) y luego crear un commit con un mensaje descriptivo.',
+      concept: 'Un commit guarda tus cambios con un mensaje que describe qué hiciste.\n\nBuen mensaje: "update landing title" — corto, claro, dice qué cambió.\nMal mensaje: "cambios" — no dice nada útil.\n\ngit add . selecciona todo. git commit -m "mensaje" lo guarda.',
       why: 'Git no guarda automáticamente. Tú decides qué guardar y cuándo, con un mensaje que explique por qué.',
       task: '',
     },
@@ -150,6 +151,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       title: 'Crear un Pull Request',
       module: 'Tu primera tarea real',
       concept: 'El último paso: crear un Pull Request para que tu equipo revise tus cambios antes de aprobarlos.\n\nUsamos la herramienta gh (GitHub CLI) para crearlo desde la terminal.\n\n--title es el título del PR (qué cambiaste). --body es la descripción (por qué lo cambiaste).',
+      analogy: 'Como pedir aprobación en Google Docs antes de enviar a los stakeholders. Tu equipo revisa antes de publicar.',
       why: 'Un Pull Request es cómo el equipo revisa tu trabajo. Nadie debería subir cambios sin revisión.',
       task: 'Escribe gh pr create --title "Update landing title" --body "Changed title to Build something amazing"',
       hint: 'Escribe el comando gh pr create con --title y --body',
@@ -216,6 +218,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       title: 'Create your branch',
       module: 'Your first real task',
       concept: 'Never work directly on main. Create a branch with a descriptive name for your change.',
+      analogy: 'Like creating a draft in Notion before publishing. If something goes wrong, the main document stays clean.',
       why: 'Branches protect the main code. If something goes wrong, main stays intact.',
       task: 'Type git checkout -b cambiar-titulo',
       hint: 'Type git checkout -b cambiar-titulo',
@@ -257,7 +260,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
     '4.8': {
       title: 'Save your changes',
       module: 'Your first real task',
-      concept: 'The change is verified. Now you need to save it in Git: first select the files (git add) then create a commit with a descriptive message.',
+      concept: 'A commit saves your changes with a message describing what you did.\n\nGood message: "update landing title" — short, clear, says what changed.\nBad message: "changes" — says nothing useful.\n\ngit add . selects everything. git commit -m "message" saves it.',
       why: 'Git doesn\'t save automatically. You decide what to save and when, with a message that explains why.',
       task: '',
     },
@@ -265,6 +268,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       title: 'Create a Pull Request',
       module: 'Your first real task',
       concept: 'The final step: create a Pull Request so your team can review your changes before approving them.\n\nWe use the gh tool (GitHub CLI) to create it from the terminal.\n\n--title is the PR title (what you changed). --body is the description (why you changed it).',
+      analogy: 'Like requesting approval in Google Docs before sending to stakeholders. Your team reviews before publishing.',
       why: 'A Pull Request is how the team reviews your work. Nobody should push changes without review.',
       task: 'Type gh pr create --title "Update landing title" --body "Changed title to Build something amazing"',
       hint: 'Type the gh pr create command with --title and --body',
@@ -331,6 +335,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       title: 'Créer ta branche',
       module: 'Ta première vraie tâche',
       concept: 'Ne travaille jamais directement sur main. Crée une branche avec un nom descriptif pour ton changement.',
+      analogy: 'Comme créer un brouillon dans Notion avant de publier. Si quelque chose ne va pas, le document principal reste intact.',
       why: 'Les branches protègent le code principal. Si quelque chose va mal, main reste intact.',
       task: 'Tape git checkout -b cambiar-titulo',
       hint: 'Tape git checkout -b cambiar-titulo',
@@ -372,7 +377,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
     '4.8': {
       title: 'Sauvegarder tes changements',
       module: 'Ta première vraie tâche',
-      concept: 'Le changement est vérifié. Maintenant tu dois le sauvegarder dans Git : d\'abord sélectionner les fichiers (git add) puis créer un commit avec un message descriptif.',
+      concept: 'Un commit sauvegarde tes changements avec un message décrivant ce que tu as fait.\n\nBon message : "update landing title" — court, clair, dit ce qui a changé.\nMauvais message : "changes" — ne dit rien d\'utile.\n\ngit add . sélectionne tout. git commit -m "message" le sauvegarde.',
       why: 'Git ne sauvegarde pas automatiquement. C\'est toi qui décides quoi sauvegarder et quand, avec un message qui explique pourquoi.',
       task: '',
     },
@@ -380,6 +385,7 @@ const content: Record<Locale, Record<string, LessonText>> = {
       title: 'Créer un Pull Request',
       module: 'Ta première vraie tâche',
       concept: 'La dernière étape : créer un Pull Request pour que ton équipe puisse réviser tes changements avant de les approuver.\n\nOn utilise l\'outil gh (GitHub CLI) pour le créer depuis le terminal.\n\n--title est le titre du PR (ce que tu as changé). --body est la description (pourquoi tu l\'as changé).',
+      analogy: 'Comme demander une approbation dans Google Docs avant d\'envoyer aux parties prenantes. Ton équipe vérifie avant de publier.',
       why: 'Un Pull Request c\'est comment l\'équipe révise ton travail. Personne ne devrait pousser des changements sans révision.',
       task: 'Tape gh pr create --title "Update landing title" --body "Changed title to Build something amazing"',
       hint: 'Tape la commande gh pr create avec --title et --body',
@@ -532,16 +538,16 @@ export function getModule4Lessons(locale: Locale): Lesson[] {
       validate: () => ({ valid: true, message: m['4.6'].ok }),
       agentSimulation: {
         scenario: locale === 'es'
-          ? 'El título en src/App.tsx dice "Welcome to our app". Cámbialo a "Build something amazing".'
+          ? 'Acabas de ver que el título de la página dice "Welcome to our app". Quieres que diga "Build something amazing". Pídele al agente que lo cambie.'
           : locale === 'fr'
-            ? 'Le titre dans src/App.tsx dit "Welcome to our app". Change-le en "Build something amazing".'
-            : 'The title in src/App.tsx says "Welcome to our app". Change it to "Build something amazing".',
+            ? 'Tu viens de voir que le titre de la page dit "Welcome to our app". Tu veux qu\'il dise "Build something amazing". Demande à l\'agent de le changer.'
+            : 'You just saw that the page title says "Welcome to our app". You want it to say "Build something amazing". Ask the agent to change it.',
         promptHint: locale === 'es'
-          ? 'Dile qué archivo cambiar y qué texto reemplazar'
+          ? 'Describe lo que quieres cambiar, como si hablaras con alguien'
           : locale === 'fr'
-            ? 'Dis-lui quel fichier changer et quel texte remplacer'
-            : 'Tell it which file to change and what text to replace',
-        acceptedPatterns: ['title|titulo|titre', 'Build something|amazing|asombroso|extraordinaire', 'App.tsx|cambiar|change|changer'],
+            ? 'Décris ce que tu veux changer, comme si tu parlais à quelqu\'un'
+            : 'Describe what you want to change, like talking to someone',
+        acceptedPatterns: ['title|titulo|titre|heading', 'Build something|amazing|asombroso|extraordinaire|cambiar|change|changer'],
         agentResponse: locale === 'es'
           ? [
               '  Voy a actualizar el título en src/App.tsx.',

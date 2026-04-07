@@ -1,8 +1,14 @@
 {
   "name": "tuilder",
   "version": "0.2.1",
-  "description": "Interactive TUI course that teaches non-tech people to use Claude Code",
+  "description": "Interactive TUI course that teaches non-tech people to use the terminal, Git, and AI coding agents",
   "type": "module",
+  "homepage": "https://ohernandezdev.github.io/tuilder/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ohernandezdev/tuilder.git"
+  },
+  "author": "Omar Hernandez (https://github.com/ohernandezdev)",
   "bin": {
     "tuilder": "./dist/index.js"
   },
@@ -15,9 +21,16 @@
   "keywords": [
     "tui",
     "cli",
+    "terminal",
     "education",
+    "learn",
+    "git",
+    "ai-agents",
     "claude-code",
-    "ink"
+    "ink",
+    "interactive",
+    "course",
+    "beginner"
   ],
   "license": "MIT",
   "files": [

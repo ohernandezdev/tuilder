@@ -8,6 +8,8 @@ npx tuilder
 
 No installation needed. Works on macOS, Linux, and WSL.
 
+<video src="https://github.com/ohernandezdev/tuilder/raw/main/videos/tuilder-demo.mp4" controls width="600"></video>
+
 ## What you'll learn
 
 | Module | Topic | Lessons |

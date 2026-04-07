@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tuilder — Learn the terminal, Git &amp; AI agents</title>
+  <meta name="description" content="Interactive TUI course that teaches non-tech people to use the terminal, Git, and AI coding agents — from zero.">
+  <meta property="og:title" content="tuilder — Learn the terminal, Git & AI agents">
+  <meta property="og:description" content="65 lessons. 7 modules. 3 languages. No experience needed.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #141413;
+      --bg-surface: #1e1e1c;
+      --bg-card: #262624;
+      --bg-card-hover: #30302e;
+      --brand: #c96442;
+      --brand-light: #d97757;
+      --brand-glow: rgba(201, 100, 66, 0.15);
+      --text-primary: #faf9f5;
+      --text-secondary: #b0aea5;
+      --text-tertiary: #87867f;
+      --text-muted: #5e5d59;
+      --border: #30302e;
+      --border-light: #3d3d3a;
+      --command: #ffd580;
+      --success: #4eba65;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-xl: 32px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(20, 20, 19, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--brand-light);
+      text-decoration: none;
+    }
+    .nav-cta {
+      background: var(--brand);
+      color: var(--text-primary);
+      padding: 8px 20px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--brand-light); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 100px 0 80px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--brand-light);
+      background: var(--brand-glow);
+      border: 1px solid rgba(201, 100, 66, 0.3);
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 32px;
+    }
+    .hero h1 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 500;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      color: var(--text-primary);
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--brand-light);
+    }
+    .hero p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    /* ── TERMINAL DEMO ── */
+    .terminal {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+    }
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .terminal-dot.red { background: #ff5f57; }
+    .terminal-dot.yellow { background: #febc2e; }
+    .terminal-dot.green { background: #28c840; }
+    .terminal-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .terminal-body {
+      padding: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .terminal-body .prompt { color: var(--success); }
+    .terminal-body .cmd { color: var(--text-primary); }
+    .terminal-body .output { color: var(--text-secondary); }
+    .terminal-body .brand { color: var(--brand-light); }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: var(--brand);
+      color: var(--text-primary);
+      padding: 14px 32px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: var(--brand-light); }
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      padding: 14px 32px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    /* ── WHAT YOU LEARN ── */
+    .section {
+      padding: 80px 0;
+    }
+    .section-title {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 500;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      color: var(--text-secondary);
+      font-size: 17px;
+      margin-bottom: 48px;
+      max-width: 520px;
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .module-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      transition: all 0.2s;
+    }
+    .module-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-light);
+    }
+    .module-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--brand-light);
+      margin-bottom: 8px;
+    }
+    .module-name {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .module-desc {
+      font-size: 14px;
+      color: var(--text-tertiary);
+      line-height: 1.5;
+    }
+    .module-lessons {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 12px;
+    }
+
+    /* ── FEATURES ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+    }
+    .feature {
+      padding: 24px;
+      border-radius: var(--radius-md);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+    }
+    .feature-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+    .feature-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .feature-desc {
+      font-size: 14px;
+      color: var(--text-tertiary);
+      line-height: 1.5;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      max-width: 560px;
+    }
+    .step {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .step-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--brand-light);
+      background: var(--brand-glow);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-text h3 {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .step-text p {
+      font-size: 14px;
+      color: var(--text-tertiary);
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center;
+      padding: 80px 0 100px;
+    }
+    .cta-section .section-title {
+      margin-bottom: 12px;
+    }
+    .cta-section p {
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      font-size: 17px;
+    }
+    .cta-install {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      padding: 16px 32px;
+      border-radius: var(--radius-md);
+      display: inline-block;
+      margin-bottom: 24px;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: border-color 0.2s;
+      position: relative;
+    }
+    .cta-install:hover { border-color: var(--brand); }
+    .cta-install .copy-hint {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: var(--text-muted);
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      text-align: center;
+    }
+    footer p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    footer a {
+      color: var(--text-tertiary);
+      text-decoration: none;
+    }
+    footer a:hover { color: var(--brand-light); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .hero { padding: 60px 0 48px; }
+      .section { padding: 48px 0; }
+      .terminal-body { font-size: 12px; padding: 16px; }
+      .hero-actions { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="container">
+      <a href="#" class="nav-logo">tuilder</a>
+      <a href="https://github.com/ohernandezdev/tuilder" class="nav-cta">GitHub</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">65 lessons &middot; 7 modules &middot; 3 languages</div>
+      <h1>Learn the terminal,<br>Git &amp; <em>AI agents</em></h1>
+      <p>An interactive course in your terminal for designers, POs, CEOs &mdash; anyone who wants to collaborate with developers using AI, without being a developer.</p>
+
+      <!-- TERMINAL DEMO -->
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">Terminal</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="prompt">$</span> <span class="cmd">npx tuilder</span></div>
+          <div>&nbsp;</div>
+          <div><span class="brand">  _         _ _     _</span></div>
+          <div><span class="brand"> | |_ _   _(_) | __| | ___ _ __</span></div>
+          <div><span class="brand"> | __| | | | | |/ _` |/ _ \ '__|</span></div>
+          <div><span class="brand"> | |_| |_| | | | (_| |  __/ |</span></div>
+          <div><span class="brand">  \__|\__,_|_|_|\__,_|\___|_|</span></div>
+          <div>&nbsp;</div>
+          <div><span class="output">Learn the terminal &amp; work with AI agents like a pro.</span></div>
+        </div>
+      </div>
+
+      <div class="hero-actions">
+        <a href="https://github.com/ohernandezdev/tuilder" class="btn-primary">Get started</a>
+        <a href="#modules" class="btn-secondary">See the course</a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">How it works</h2>
+      <p class="section-sub">One command. No installation. Your terminal becomes a classroom.</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">
+            <h3>Open your terminal</h3>
+            <p>On Mac: Terminal or iTerm. On Windows: Windows Terminal with WSL.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">
+            <h3>Run one command</h3>
+            <p><code style="color: var(--command);">npx tuilder</code> &mdash; that's it. No install needed.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">
+            <h3>Learn by doing</h3>
+            <p>Each lesson explains a concept and asks you to practice it in a safe simulated environment.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">
+            <h3>Graduate</h3>
+            <p>Complete all 65 lessons, earn your certificate, and start contributing to real projects.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- MODULES -->
+  <section class="section" id="modules">
+    <div class="container">
+      <h2 class="section-title">What you'll learn</h2>
+      <p class="section-sub">From "what is a terminal?" to collaborating on real projects with AI agents.</p>
+
+      <div class="modules-grid">
+        <div class="module-card">
+          <div class="module-num">MODULE 0</div>
+          <div class="module-name">Getting Started</div>
+          <div class="module-desc">Why you're here, what the terminal is, and how to use the course controls.</div>
+          <div class="module-lessons">4 lessons</div>
+        </div>
+        <div class="module-card">
+          <div class="module-num">MODULE 1</div>
+          <div class="module-name">Terminal Basics</div>
+          <div class="module-desc">Navigate folders, read files, create directories. The essential commands.</div>
+          <div class="module-lessons">12 lessons</div>
+        </div>
+        <div class="module-card">
+          <div class="module-num">MODULE 2</div>
+          <div class="module-name">Git Fundamentals</div>
+          <div class="module-desc">Save versions of your work, create branches, and understand the git workflow.</div>
+          <div class="module-lessons">11 lessons</div>
+        </div>
+        <div class="module-card">
+          <div class="module-num">MODULE 3</div>
+          <div class="module-name">Your First AI Agent</div>
+          <div class="module-desc">Meet Claude Code. Learn to prompt, review changes, and approve or reject diffs.</div>
+          <div class="module-lessons">11 lessons</div>
+        </div>
+        <div class="module-card">
+          <div class="module-num">MODULE 4</div>
+          <div class="module-name">Your First Real Task</div>
+          <div class="module-desc">Navigate a real project, understand the code, and make changes with AI help.</div>
+          <div class="module-lessons">10 lessons</div>
+        </div>
+        <div class="module-card">
+          <div class="module-num">MODULE 5</div>
+          <div class="module-name">Team Collaboration</div>
+          <div class="module-desc">Pull requests, code review, merge conflicts, and working with your team.</div>
+          <div class="module-lessons">11 lessons</div>
+        </div>
+        <div class="module-card">
+          <div class="module-num">MODULE 6</div>
+          <div class="module-name">Graduation</div>
+          <div class="module-desc">Review everything, take the final quiz, and get your certificate.</div>
+          <div class="module-lessons">6 lessons</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- FEATURES -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Built for humans</h2>
+      <p class="section-sub">Not another boring tutorial. This is a game you play in your terminal.</p>
+
+      <div class="features-grid">
+        <div class="feature">
+          <div class="feature-icon">🎮</div>
+          <div class="feature-title">Interactive challenges</div>
+          <div class="feature-desc">Type real commands in a safe simulated terminal. Nothing you do can break anything.</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🤖</div>
+          <div class="feature-title">AI agent simulation</div>
+          <div class="feature-desc">Practice prompting AI, reviewing diffs, and approving or rejecting changes.</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">💡</div>
+          <div class="feature-title">Progressive hints</div>
+          <div class="feature-desc">Stuck? Get a gentle nudge first. Still stuck? Get the exact answer. No shame.</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">⭐</div>
+          <div class="feature-title">XP &amp; levels</div>
+          <div class="feature-desc">Earn experience points, level up through 5 ranks, and track your daily streak.</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🌍</div>
+          <div class="feature-title">3 languages</div>
+          <div class="feature-desc">Available in English, Spanish, and French. Choose your language at the start.</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🎓</div>
+          <div class="feature-title">Certificate</div>
+          <div class="feature-desc">Complete all 65 lessons and earn a terminal-rendered graduation certificate.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <h2 class="section-title">Ready to start?</h2>
+      <p>Open your terminal and run:</p>
+      <div class="cta-install" onclick="navigator.clipboard.writeText('npx tuilder'); this.querySelector('.copy-hint').textContent = 'Copied!'">
+        npx tuilder
+        <span class="copy-hint">click to copy</span>
+      </div>
+      <br>
+      <a href="https://github.com/ohernandezdev/tuilder" class="btn-secondary" style="margin-top: 16px;">View on GitHub</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <p>Made with care by <a href="https://github.com/ohernandezdev">Omar Hernandez</a> &middot; <a href="https://github.com/ohernandezdev/tuilder">Open Source</a> &middot; MIT License</p>
+    </div>
+  </footer>
+
+</body>
+</html>

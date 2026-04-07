@@ -143,7 +143,32 @@
     .bento-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--brand-light); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
     .bento-title { font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; font-weight: 500; margin-bottom: 8px; }
     .bento-desc { font-size: 14px; color: var(--text-tertiary); line-height: 1.6; }
-    .bento-mini-term { margin-top: 16px; border-radius: var(--radius-sm); background: var(--bg-deep); border: 1px solid var(--border); padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.7; }
+    .bento-mini-term { margin-top: 16px; border-radius: var(--radius-sm); background: var(--bg-deep); border: 1px solid #555; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.7; overflow: hidden; }
+    .ink-header { display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; border-bottom: 1px solid #555; }
+    .ink-header-left { display: flex; align-items: center; gap: 8px; }
+    .ink-dots { display: flex; gap: 5px; }
+    .ink-dots span { width: 10px; height: 10px; border-radius: 50%; }
+    .ink-dots .dr { background: #FF6B80; } .ink-dots .dy { background: #FFC107; } .ink-dots .dg { background: #4EBA65; }
+    .ink-header-title { font-size: 11px; color: #D77757; font-weight: 500; }
+    .ink-header-right { display: flex; align-items: center; gap: 8px; font-size: 10px; }
+    .ink-header-right .ink-user { color: #777; }
+    .ink-header-right .ink-mod { color: #AAA; }
+    .ink-header-right .ink-prog { color: #777; }
+    .ink-header-right .ink-xp { color: #777; }
+    .ink-body { padding: 12px 14px; min-height: 80px; }
+    .ink-phase { display: flex; gap: 2px; margin-bottom: 8px; }
+    .ink-phase span { display: inline-block; width: 14px; height: 3px; border-radius: 1px; }
+    .ink-phase .active { background: #D77757; } .ink-phase .inactive { background: #444; }
+    .ink-lesson-title { color: #D77757; font-weight: 600; font-size: 12px; margin-bottom: 8px; }
+    /* Ink terminal window (inside lesson) */
+    .ink-term-window { border: 1px solid #555; border-radius: 8px; overflow: hidden; margin-top: 8px; }
+    .ink-term-bar { display: flex; align-items: center; gap: 5px; padding: 5px 10px; }
+    .ink-term-bar .dr { background: #FF6B80; } .ink-term-bar .dy { background: #FFC107; } .ink-term-bar .dg { background: #4EBA65; }
+    .ink-term-bar span.dot { width: 8px; height: 8px; border-radius: 50%; }
+    .ink-term-bar .ttl { font-size: 10px; color: #777; margin-left: 4px; }
+    .ink-term-body { padding: 8px 10px; background: var(--bg-deep); }
+    .ink-hint { color: #777; font-size: 11px; margin-top: 8px; }
+    .ink-nav { color: #444; font-size: 10px; margin-top: 6px; }
     .bento-stat { font-family: 'JetBrains Mono', monospace; font-size: 42px; font-weight: 600; color: var(--brand-light); line-height: 1; margin: 16px 0 6px; }
     .bento-stat-label { font-size: 13px; color: var(--text-muted); }
     /* Glow */
@@ -271,12 +296,33 @@
       <p class="section-sub">Not another boring tutorial. This is a game you play in your terminal.</p>
 
       <div class="bento">
-        <!-- Interactive challenges — big card with live terminal -->
-        <div class="bento-card b-8 anim-item">
-          <div class="bento-label">Interactive</div>
-          <div class="bento-title">Practice real commands</div>
-          <div class="bento-desc">Type commands in a safe simulated terminal. Nothing you do can break anything.</div>
-          <div class="bento-mini-term" id="bentoTerm1"></div>
+        <!-- Terminal lesson — faithful Ink recreation -->
+        <div class="bento-card b-8 anim-item" style="padding:0">
+          <div class="bento-mini-term" style="margin:0;border:0;border-radius:var(--radius-lg)">
+            <div class="ink-header">
+              <div class="ink-header-left"><span class="ink-header-title">tuilder</span></div>
+              <div class="ink-header-right">
+                <span class="ink-user">Alex</span><span style="color:#444">|</span>
+                <span class="ink-mod">Terminal Basics</span><span style="color:#444">|</span>
+                <span class="ink-prog">12/65</span><span style="color:#444">|</span>
+                <span class="ink-xp">Lv2 ████░░ 180xp</span>
+              </div>
+            </div>
+            <div class="ink-body" id="bentoTerm1">
+              <div class="ink-phase"><span class="active"></span><span class="active"></span></div>
+              <div class="ink-lesson-title">Reading files</div>
+              <div style="color:#EEE;margin-bottom:10px">The <span style="color:#FFD580">cat</span> command reads a file and shows its content.</div>
+              <div style="color:#AAA;margin-bottom:12px">It's like opening a document — but in the terminal.</div>
+              <div class="ink-term-window">
+                <div class="ink-term-bar"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span><span class="ttl">Terminal</span></div>
+                <div class="ink-term-body">
+                  <div><span style="color:#4EBA65">$</span> <span id="inkType1"></span></div>
+                </div>
+              </div>
+              <div class="ink-hint">Write <span style="color:#FFD580">cat README.md</span> and press Enter ↵</div>
+              <div class="ink-nav">Esc to go back</div>
+            </div>
+          </div>
         </div>
 
         <!-- Stats -->
@@ -290,42 +336,91 @@
             <div class="bento-stat" style="font-size:28px">5</div>
             <div class="bento-stat-label">XP ranks to unlock</div>
           </div>
+          <div style="margin-top:24px">
+            <div class="bento-stat" style="font-size:28px">3</div>
+            <div class="bento-stat-label">languages (EN/ES/FR)</div>
+          </div>
         </div>
 
-        <!-- AI sim — with diff preview -->
-        <div class="bento-card b-5 anim-item">
-          <div class="bento-label">AI Agents</div>
-          <div class="bento-title">Review diffs like a pro</div>
-          <div class="bento-desc">Prompt Claude Code, review changes line by line, approve or reject.</div>
-          <div class="bento-mini-term" id="bentoDiff"></div>
-        </div>
-
-        <!-- Hints + Languages + Cert -->
-        <div class="bento-card b-7 anim-item">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
-            <div>
-              <div class="bento-label">Smart hints</div>
-              <div class="bento-title">Never get stuck</div>
-              <div class="bento-desc">Progressive hints: gentle nudge first, exact answer second. No shame.</div>
+        <!-- AI diff review — Ink style -->
+        <div class="bento-card b-7 anim-item" style="padding:0">
+          <div class="bento-mini-term" style="margin:0;border:0;border-radius:var(--radius-lg)">
+            <div class="ink-header">
+              <div class="ink-header-left"><span class="ink-header-title">tuilder</span></div>
+              <div class="ink-header-right">
+                <span class="ink-user">Alex</span><span style="color:#444">|</span>
+                <span class="ink-mod">AI Agents</span><span style="color:#444">|</span>
+                <span class="ink-prog">38/65</span>
+              </div>
             </div>
-            <div>
-              <div class="bento-label">i18n</div>
-              <div class="bento-title">3 languages</div>
-              <div class="bento-desc">English, Spanish, and French. Switch anytime from the menu.</div>
-              <div style="margin-top:12px;display:flex;gap:8px">
-                <span style="background:var(--bg-deep);border:1px solid var(--border);padding:4px 10px;border-radius:6px;font-size:12px;color:var(--text-secondary)">EN</span>
-                <span style="background:var(--bg-deep);border:1px solid var(--border);padding:4px 10px;border-radius:6px;font-size:12px;color:var(--text-secondary)">ES</span>
-                <span style="background:var(--bg-deep);border:1px solid var(--border);padding:4px 10px;border-radius:6px;font-size:12px;color:var(--text-secondary)">FR</span>
+            <div class="ink-body" id="bentoDiff">
+              <div class="ink-phase"><span class="active"></span><span class="active"></span></div>
+              <div class="ink-lesson-title">Reviewing changes</div>
+              <div style="color:#AAA;margin-bottom:10px;font-size:11px">Claude made changes to your file. Review the diff:</div>
+              <div style="background:#1a1a18;border:1px solid #333;border-radius:6px;padding:8px 10px;font-size:11px;margin-bottom:10px">
+                <div style="color:#AAA">src/App.tsx</div>
+                <div style="color:#FF6B80">- &lt;h1&gt;Welcome&lt;/h1&gt;</div>
+                <div style="color:#4EBA65">+ &lt;h1&gt;Welcome, {name}&lt;/h1&gt;</div>
+              </div>
+              <div style="display:flex;gap:16px">
+                <span style="color:#D77757">▸ Approve</span>
+                <span style="color:#777">Reject</span>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Git lesson preview -->
-        <div class="bento-card b-7 anim-item">
-          <div class="bento-label">Git workflow</div>
-          <div class="bento-title">Learn git step by step</div>
-          <div class="bento-mini-term" id="bentoGit"></div>
+        <!-- Hints — Ink style -->
+        <div class="bento-card b-5 anim-item" style="padding:0">
+          <div class="bento-mini-term" style="margin:0;border:0;border-radius:var(--radius-lg)">
+            <div class="ink-header">
+              <div class="ink-header-left"><span class="ink-header-title">tuilder</span></div>
+              <div class="ink-header-right">
+                <span class="ink-mod">Terminal Basics</span>
+              </div>
+            </div>
+            <div class="ink-body">
+              <div class="ink-phase"><span class="active"></span><span class="active"></span></div>
+              <div class="ink-lesson-title">Your turn!</div>
+              <div class="ink-term-window">
+                <div class="ink-term-bar"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span><span class="ttl">Terminal</span></div>
+                <div class="ink-term-body">
+                  <div><span style="color:#4EBA65">$</span> <span style="color:#EEE">mkdri photos</span></div>
+                  <div style="color:#FFC107;margin-top:4px">Almost! Try again: mkdir photos</div>
+                </div>
+              </div>
+              <div style="color:#B1B9F9;font-size:11px;margin-top:8px">Hint: The command is <span style="color:#FFD580">mkdir photos</span></div>
+              <div class="ink-nav">Esc to go back</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Git lesson — Ink style -->
+        <div class="bento-card b-7 anim-item" style="padding:0">
+          <div class="bento-mini-term" style="margin:0;border:0;border-radius:var(--radius-lg)">
+            <div class="ink-header">
+              <div class="ink-header-left"><span class="ink-header-title">tuilder</span></div>
+              <div class="ink-header-right">
+                <span class="ink-user">Alex</span><span style="color:#444">|</span>
+                <span class="ink-mod">Git Fundamentals</span><span style="color:#444">|</span>
+                <span class="ink-prog">25/65</span>
+              </div>
+            </div>
+            <div class="ink-body" id="bentoGit">
+              <div class="ink-phase"><span class="active"></span><span class="active"></span></div>
+              <div class="ink-lesson-title">Saving your work</div>
+              <div class="ink-term-window">
+                <div class="ink-term-bar"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span><span class="ttl">~/my-app</span></div>
+                <div class="ink-term-body">
+                  <div><span style="color:#4EBA65">$</span> <span style="color:#EEE">git add .</span></div>
+                  <div><span style="color:#4EBA65">$</span> <span style="color:#EEE">git commit -m "Add greeting"</span></div>
+                  <div style="color:#4EBA65;margin-top:4px">[main a3f9c12] Add greeting</div>
+                  <div style="color:#AAA"> 1 file changed, 2 insertions(+)</div>
+                </div>
+              </div>
+              <div style="margin-top:8px"><span style="color:#D77757">▸</span> <span style="color:#EEE">Press Enter</span> <span style="color:#D77757;font-weight:bold;background:#D77757;color:#141413;padding:1px 6px;border-radius:3px;font-size:10px"> Enter </span> <span style="color:#D77757">to continue</span></div>
+            </div>
+          </div>
         </div>
 
         <!-- Certificate -->
@@ -415,44 +510,32 @@
     setTimeout(go,700);
   })();
 
-  // ── Bento mini terminals — autoplay loops ──
-  function miniTerm(id,frames,speed){
-    const el=document.getElementById(id);if(!el)return;
-    let f=0;
-    function render(){
-      el.innerHTML=frames[f];f=(f+1)%frames.length;
-      setTimeout(render,speed);
-    }
-    // Start when visible
-    const obs=new IntersectionObserver(e=>{if(e[0].isIntersecting){obs.disconnect();render()}},{threshold:0.3});
+  // ── Bento typewriter for terminal lesson ──
+  (function(){
+    const el=document.getElementById('inkType1');if(!el)return;
+    const cmd='cat README.md';let i=0;
+    const obs=new IntersectionObserver(e=>{
+      if(!e[0].isIntersecting)return;obs.disconnect();
+      (function t(){if(i>=cmd.length){
+        setTimeout(()=>{
+          const body=el.closest('.ink-term-body');
+          const out=document.createElement('div');
+          out.style.color='#AAA';out.style.marginTop='4px';
+          out.innerHTML='# Landing Page\n\nTeam welcome page.\nMain file: src/App.tsx';
+          body.appendChild(out);
+          setTimeout(()=>{
+            const ok=document.createElement('div');
+            ok.style.cssText='color:#4EBA65;margin-top:8px;font-weight:600';
+            ok.textContent='✓ Lesson complete! +15 XP';
+            body.appendChild(ok);
+          },800);
+        },400);
+        return;
+      }
+      el.textContent=cmd.slice(0,++i);setTimeout(t,60+Math.random()*40)})();
+    },{threshold:0.3});
     obs.observe(el);
-  }
-
-  // Terminal basics demo
-  miniTerm('bentoTerm1',[
-    '<span class="p">$</span> <span class="c">ls</span>\n<span class="o">README.md  package.json  src/  public/</span>',
-    '<span class="p">$</span> <span class="c">ls</span>\n<span class="o">README.md  package.json  src/  public/</span>\n<span class="p">$</span> <span class="c">cd src</span>',
-    '<span class="p">~/src $</span> <span class="c">ls</span>\n<span class="o">App.tsx  index.ts  styles.css</span>',
-    '<span class="p">~/src $</span> <span class="c">cat App.tsx</span>\n<span class="o">function App() {</span>\n<span class="o">  return &lt;h1&gt;Hello&lt;/h1&gt;</span>\n<span class="o">}</span>',
-    '<span class="s">✓ Lesson complete! +15 XP</span>',
-  ],2200);
-
-  // Diff review demo
-  miniTerm('bentoDiff',[
-    '<span class="d">Claude is thinking...</span>',
-    '<span class="o">  App.tsx</span>\n<span class="e">- &lt;h1&gt;Welcome&lt;/h1&gt;</span>\n<span class="s">+ &lt;h1&gt;Welcome, {name}&lt;/h1&gt;</span>',
-    '<span class="o">  App.tsx</span>\n<span class="e">- &lt;h1&gt;Welcome&lt;/h1&gt;</span>\n<span class="s">+ &lt;h1&gt;Welcome, {name}&lt;/h1&gt;</span>\n\n<span class="b">▸ Approve</span>  <span class="d">Reject</span>',
-    '<span class="s">✓ Change approved!</span>',
-  ],2400);
-
-  // Git workflow demo
-  miniTerm('bentoGit',[
-    '<span class="p">$</span> <span class="c">git status</span>\n<span class="e">  modified: src/App.tsx</span>',
-    '<span class="p">$</span> <span class="c">git add .</span>\n<span class="p">$</span> <span class="c">git commit -m "Add greeting"</span>',
-    '<span class="s">[main a3f9c12] Add greeting</span>\n<span class="o"> 1 file changed, 2 insertions(+)</span>',
-    '<span class="p">$</span> <span class="c">git log --oneline</span>\n<span class="w">a3f9c12</span> <span class="o">Add greeting</span>\n<span class="w">b7e2d01</span> <span class="o">Initial commit</span>',
-    '<span class="s">✓ Lesson complete! +15 XP</span>',
-  ],2200);
+  })();
 
   // ── GSAP scroll animations ──
   window.addEventListener('load',()=>{

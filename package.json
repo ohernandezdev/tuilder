@@ -1,6 +1,6 @@
 {
   "name": "tuilder",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Interactive TUI course that teaches non-tech people to use the terminal, Git, and AI coding agents",
   "type": "module",
   "homepage": "https://ohernandezdev.github.io/tuilder/",

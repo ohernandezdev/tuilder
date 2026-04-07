@@ -143,7 +143,10 @@
     .bento-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--brand-light); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
     .bento-title { font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; font-weight: 500; margin-bottom: 8px; }
     .bento-desc { font-size: 14px; color: var(--text-tertiary); line-height: 1.6; }
-    .bento-mini-term { margin-top: 16px; border-radius: var(--radius-sm); background: var(--bg-deep); border: 1px solid #555; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.7; overflow: hidden; }
+    .bento-mini-term { border-radius: var(--radius-lg); background: var(--bg-deep); border: 1px solid #555; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.7; overflow: hidden; height: 100%; display: flex; flex-direction: column; }
+    .bento-card.ink-card { padding: 0; background: var(--bg-deep); border-color: #555; }
+    .bento-card.ink-card .bento-mini-term { border: 0; border-radius: var(--radius-lg); }
+    .bento-card.ink-card .ink-body { flex: 1; padding: 16px 18px; }
     .ink-header { display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; border-bottom: 1px solid #555; }
     .ink-header-left { display: flex; align-items: center; gap: 8px; }
     .ink-dots { display: flex; gap: 5px; }
@@ -296,9 +299,9 @@
       <p class="section-sub">Real practice, real commands, real confidence &mdash; in a safe sandbox.</p>
 
       <div class="bento">
-        <!-- Terminal lesson — faithful Ink recreation -->
-        <div class="bento-card b-8 anim-item" style="padding:0">
-          <div class="bento-mini-term" style="margin:0;border:0;border-radius:var(--radius-lg)">
+        <!-- Row 1: Terminal lesson (8) + Stats (4) -->
+        <div class="bento-card ink-card b-8 anim-item">
+          <div class="bento-mini-term">
             <div class="ink-header">
               <div class="ink-header-left"><span class="ink-header-title">tuilder</span></div>
               <div class="ink-header-right">
@@ -312,7 +315,7 @@
               <div class="ink-phase"><span class="active"></span><span class="active"></span></div>
               <div class="ink-lesson-title">Reading files</div>
               <div style="color:#EEE;margin-bottom:10px">The <span style="color:#FFD580">cat</span> command reads a file and shows its content.</div>
-              <div style="color:#AAA;margin-bottom:12px">It's like opening a document — but in the terminal.</div>
+              <div style="color:#AAA;margin-bottom:14px">It's like opening a document — but in the terminal.</div>
               <div class="ink-term-window">
                 <div class="ink-term-bar"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span><span class="ttl">Terminal</span></div>
                 <div class="ink-term-body">
@@ -325,26 +328,25 @@
           </div>
         </div>
 
-        <!-- Stats -->
         <div class="bento-card b-4 anim-item" style="display:flex;flex-direction:column;justify-content:space-between">
           <div>
             <div class="bento-label">Progress</div>
             <div class="bento-stat">65</div>
             <div class="bento-stat-label">interactive lessons</div>
           </div>
-          <div style="margin-top:24px">
+          <div style="margin-top:20px">
             <div class="bento-stat" style="font-size:28px">5</div>
             <div class="bento-stat-label">XP ranks to unlock</div>
           </div>
-          <div style="margin-top:24px">
+          <div style="margin-top:20px">
             <div class="bento-stat" style="font-size:28px">3</div>
             <div class="bento-stat-label">languages (EN/ES/FR)</div>
           </div>
         </div>
 
-        <!-- AI diff review — Ink style -->
-        <div class="bento-card b-7 anim-item" style="padding:0">
-          <div class="bento-mini-term" style="margin:0;border:0;border-radius:var(--radius-lg)">
+        <!-- Row 2: AI diff (6) + Hints (6) -->
+        <div class="bento-card ink-card b-6 anim-item">
+          <div class="bento-mini-term">
             <div class="ink-header">
               <div class="ink-header-left"><span class="ink-header-title">tuilder</span></div>
               <div class="ink-header-right">
@@ -353,11 +355,11 @@
                 <span class="ink-prog">38/65</span>
               </div>
             </div>
-            <div class="ink-body" id="bentoDiff">
+            <div class="ink-body">
               <div class="ink-phase"><span class="active"></span><span class="active"></span></div>
               <div class="ink-lesson-title">Reviewing changes</div>
-              <div style="color:#AAA;margin-bottom:10px;font-size:11px">Claude made changes to your file. Review the diff:</div>
-              <div style="background:#1a1a18;border:1px solid #333;border-radius:6px;padding:8px 10px;font-size:11px;margin-bottom:10px">
+              <div style="color:#AAA;margin-bottom:12px">Claude made changes to your file. Review the diff:</div>
+              <div style="background:#1a1a18;border:1px solid #333;border-radius:6px;padding:10px 12px;margin-bottom:12px">
                 <div style="color:#AAA">src/App.tsx</div>
                 <div style="color:#FF6B80">- &lt;h1&gt;Welcome&lt;/h1&gt;</div>
                 <div style="color:#4EBA65">+ &lt;h1&gt;Welcome, {name}&lt;/h1&gt;</div>
@@ -366,22 +368,25 @@
                 <span style="color:#D77757">▸ Approve</span>
                 <span style="color:#777">Reject</span>
               </div>
+              <div class="ink-nav">Esc to go back</div>
             </div>
           </div>
         </div>
 
-        <!-- Hints — Ink style -->
-        <div class="bento-card b-5 anim-item" style="padding:0">
-          <div class="bento-mini-term" style="margin:0;border:0;border-radius:var(--radius-lg)">
+        <div class="bento-card ink-card b-6 anim-item">
+          <div class="bento-mini-term">
             <div class="ink-header">
               <div class="ink-header-left"><span class="ink-header-title">tuilder</span></div>
               <div class="ink-header-right">
-                <span class="ink-mod">Terminal Basics</span>
+                <span class="ink-user">Alex</span><span style="color:#444">|</span>
+                <span class="ink-mod">Terminal Basics</span><span style="color:#444">|</span>
+                <span class="ink-prog">8/65</span>
               </div>
             </div>
             <div class="ink-body">
               <div class="ink-phase"><span class="active"></span><span class="active"></span></div>
               <div class="ink-lesson-title">Your turn!</div>
+              <div style="color:#EEE;margin-bottom:12px">Create a folder called <span style="color:#FFD580">photos</span>.</div>
               <div class="ink-term-window">
                 <div class="ink-term-bar"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span><span class="ttl">Terminal</span></div>
                 <div class="ink-term-body">
@@ -389,15 +394,15 @@
                   <div style="color:#FFC107;margin-top:4px">Almost! Try again: mkdir photos</div>
                 </div>
               </div>
-              <div style="color:#B1B9F9;font-size:11px;margin-top:8px">Hint: The command is <span style="color:#FFD580">mkdir photos</span></div>
+              <div style="color:#B1B9F9;margin-top:10px">Hint: The command is <span style="color:#FFD580">mkdir photos</span></div>
               <div class="ink-nav">Esc to go back</div>
             </div>
           </div>
         </div>
 
-        <!-- Git lesson — Ink style -->
-        <div class="bento-card b-7 anim-item" style="padding:0">
-          <div class="bento-mini-term" style="margin:0;border:0;border-radius:var(--radius-lg)">
+        <!-- Row 3: Git (7) + Certificate (5) -->
+        <div class="bento-card ink-card b-7 anim-item">
+          <div class="bento-mini-term">
             <div class="ink-header">
               <div class="ink-header-left"><span class="ink-header-title">tuilder</span></div>
               <div class="ink-header-right">
@@ -406,9 +411,10 @@
                 <span class="ink-prog">25/65</span>
               </div>
             </div>
-            <div class="ink-body" id="bentoGit">
+            <div class="ink-body">
               <div class="ink-phase"><span class="active"></span><span class="active"></span></div>
               <div class="ink-lesson-title">Saving your work</div>
+              <div style="color:#EEE;margin-bottom:12px">Now save your changes with a message.</div>
               <div class="ink-term-window">
                 <div class="ink-term-bar"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span><span class="ttl">~/my-app</span></div>
                 <div class="ink-term-body">
@@ -418,19 +424,19 @@
                   <div style="color:#AAA"> 1 file changed, 2 insertions(+)</div>
                 </div>
               </div>
-              <div style="margin-top:8px"><span style="color:#D77757">▸</span> <span style="color:#EEE">Press Enter</span> <span style="color:#D77757;font-weight:bold;background:#D77757;color:#141413;padding:1px 6px;border-radius:3px;font-size:10px"> Enter </span> <span style="color:#D77757">to continue</span></div>
+              <div style="margin-top:10px"><span style="color:#D77757">▸ </span><span style="color:#EEE">Press Enter </span><span style="background:#D77757;color:#141413;padding:1px 8px;border-radius:3px;font-size:10px;font-weight:bold"> Enter </span><span style="color:#D77757"> to continue</span></div>
+              <div class="ink-nav">Esc to go back</div>
             </div>
           </div>
         </div>
 
-        <!-- Certificate -->
-        <div class="bento-card b-5 anim-item" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:200px">
-          <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="var(--brand-light)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:16px">
+        <div class="bento-card b-5 anim-item" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+          <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="var(--brand-light)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:20px">
             <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0zM22 10v6"/>
             <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>
           </svg>
           <div class="bento-title">Earn your certificate</div>
-          <div class="bento-desc" style="max-width:240px">Finish all 65 lessons and earn your certificate.</div>
+          <div class="bento-desc" style="max-width:260px">Finish all 65 lessons and earn your terminal-printed graduation certificate.</div>
         </div>
       </div>
     </div>

@@ -23,8 +23,8 @@ interface AppProps {
 }
 
 const LANG_OPTIONS: { locale: Locale; label: string }[] = [
-  { locale: 'es', label: 'Español' },
   { locale: 'en', label: 'English' },
+  { locale: 'es', label: 'Español' },
   { locale: 'fr', label: 'Français' },
 ];
 

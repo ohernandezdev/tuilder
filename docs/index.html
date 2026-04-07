@@ -11,415 +11,203 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js" defer></script>
   <style>
     :root {
       --bg-deep: #141413;
-      --bg-surface: #1e1e1c;
-      --bg-card: #262624;
-      --bg-card-hover: #30302e;
+      --bg-surface: #1a1a18;
+      --bg-card: #1e1e1c;
+      --bg-card-hover: #262624;
       --brand: #c96442;
       --brand-light: #d97757;
-      --brand-glow: rgba(201, 100, 66, 0.15);
+      --brand-glow: rgba(201, 100, 66, 0.12);
       --text-primary: #faf9f5;
       --text-secondary: #b0aea5;
       --text-tertiary: #87867f;
       --text-muted: #5e5d59;
-      --border: #30302e;
+      --border: #2a2a28;
       --border-light: #3d3d3a;
       --command: #ffd580;
       --success: #4eba65;
+      --info: #b1b9f9;
+      --error: #ff6b80;
       --radius-sm: 8px;
       --radius-md: 12px;
-      --radius-lg: 20px;
-      --radius-xl: 32px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family: 'Inter', system-ui, sans-serif;
       background: var(--bg-deep);
       color: var(--text-primary);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
-
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
+    .container { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
 
     /* ── NAV ── */
     nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(20, 20, 19, 0.85);
-      backdrop-filter: blur(20px);
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(20, 20, 19, 0.8);
+      backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border);
-      padding: 16px 0;
+      padding: 14px 0;
     }
-    nav .container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .nav-logo {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 18px;
-      font-weight: 500;
-      color: var(--brand-light);
-      text-decoration: none;
-    }
-    .nav-cta {
-      background: var(--brand);
-      color: var(--text-primary);
-      padding: 8px 20px;
-      border-radius: var(--radius-sm);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      transition: background 0.2s;
-    }
-    .nav-cta:hover { background: var(--brand-light); }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    .nav-logo { font-family: 'JetBrains Mono', monospace; font-size: 17px; font-weight: 500; color: var(--brand-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a { font-size: 14px; color: var(--text-tertiary); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text-primary); }
+    .nav-cta { background: var(--brand); color: var(--text-primary) !important; padding: 7px 18px; border-radius: var(--radius-sm); font-weight: 500; transition: background 0.2s; }
+    .nav-cta:hover { background: var(--brand-light) !important; }
 
     /* ── HERO ── */
-    .hero {
-      padding: 100px 0 80px;
-      text-align: center;
-    }
+    .hero { padding: 100px 0 80px; text-align: center; }
     .hero-badge {
-      display: inline-block;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      color: var(--brand-light);
-      background: var(--brand-glow);
-      border: 1px solid rgba(201, 100, 66, 0.3);
-      padding: 6px 16px;
-      border-radius: 100px;
-      margin-bottom: 32px;
+      display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      color: var(--brand-light); background: var(--brand-glow);
+      border: 1px solid rgba(201,100,66,0.25); padding: 6px 16px;
+      border-radius: 100px; margin-bottom: 32px;
     }
     .hero h1 {
       font-family: 'Source Serif 4', Georgia, serif;
-      font-size: clamp(36px, 6vw, 64px);
-      font-weight: 500;
-      line-height: 1.1;
-      margin-bottom: 24px;
-      color: var(--text-primary);
+      font-size: clamp(36px, 6vw, 64px); font-weight: 500;
+      line-height: 1.08; margin-bottom: 24px;
     }
-    .hero h1 em {
-      font-style: normal;
-      color: var(--brand-light);
-    }
-    .hero p {
-      font-size: 18px;
-      color: var(--text-secondary);
-      max-width: 560px;
-      margin: 0 auto 40px;
-      line-height: 1.7;
-    }
+    .hero h1 em { font-style: normal; color: var(--brand-light); }
+    .hero p { font-size: 18px; color: var(--text-secondary); max-width: 540px; margin: 0 auto 40px; line-height: 1.7; }
 
-    /* ── TERMINAL DEMO ── */
+    /* ── TERMINAL ── */
     .terminal {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      max-width: 600px;
-      margin: 0 auto 40px;
-      overflow: hidden;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03) inset;
     }
     .terminal-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+      padding: 11px 16px; border-bottom: 1px solid var(--border);
     }
-    .terminal-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-    .terminal-dot.red { background: #ff5f57; }
-    .terminal-dot.yellow { background: #febc2e; }
-    .terminal-dot.green { background: #28c840; }
-    .terminal-title {
-      font-family: 'Inter', sans-serif;
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-left: 8px;
-    }
+    .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .terminal-dot.r { background: #ff5f57; } .terminal-dot.y { background: #febc2e; } .terminal-dot.g { background: #28c840; }
+    .terminal-title { font-size: 12px; color: var(--text-muted); margin-left: 8px; }
     .terminal-body {
-      padding: 20px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
-      line-height: 1.8;
+      padding: 18px 20px; font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; line-height: 1.7; min-height: 180px;
     }
-    .terminal-body .prompt { color: var(--success); }
-    .terminal-body .cmd { color: var(--text-primary); }
-    .terminal-body .output { color: var(--text-secondary); }
-    .terminal-body .brand { color: var(--brand-light); }
+    .terminal-body .p { color: var(--success); }
+    .terminal-body .c { color: var(--text-primary); }
+    .terminal-body .o { color: var(--text-secondary); }
+    .terminal-body .b { color: var(--brand-light); }
+    .terminal-body .d { color: var(--text-muted); }
+    .terminal-body .s { color: var(--success); }
+    .terminal-body .e { color: var(--error); }
+    .terminal-body .i { color: var(--info); }
+    .terminal-body .w { color: var(--command); }
 
-    .hero-actions {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .btn-primary {
-      background: var(--brand);
-      color: var(--text-primary);
-      padding: 14px 32px;
-      border-radius: var(--radius-md);
-      text-decoration: none;
-      font-size: 16px;
-      font-weight: 500;
-      transition: background 0.2s;
-    }
-    .btn-primary:hover { background: var(--brand-light); }
-    .btn-secondary {
-      background: var(--bg-card);
-      color: var(--text-secondary);
-      padding: 14px 32px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      text-decoration: none;
-      font-size: 16px;
-      font-weight: 500;
-      transition: all 0.2s;
-    }
-    .btn-secondary:hover {
-      background: var(--bg-card-hover);
-      color: var(--text-primary);
-    }
+    .hero-terminal { max-width: 600px; margin: 0 auto 48px; }
+    .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: var(--brand); color: var(--text-primary); padding: 13px 30px; border-radius: var(--radius-md); text-decoration: none; font-size: 15px; font-weight: 500; transition: background 0.2s, transform 0.15s; }
+    .btn-primary:hover { background: var(--brand-light); transform: translateY(-1px); }
+    .btn-secondary { background: var(--bg-card); color: var(--text-secondary); padding: 13px 30px; border-radius: var(--radius-md); border: 1px solid var(--border); text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.2s; }
+    .btn-secondary:hover { background: var(--bg-card-hover); color: var(--text-primary); }
 
-    /* ── WHAT YOU LEARN ── */
-    .section {
-      padding: 80px 0;
-    }
-    .section-title {
-      font-family: 'Source Serif 4', Georgia, serif;
-      font-size: clamp(28px, 4vw, 40px);
-      font-weight: 500;
-      line-height: 1.2;
-      margin-bottom: 16px;
-    }
-    .section-sub {
-      color: var(--text-secondary);
-      font-size: 17px;
-      margin-bottom: 48px;
-      max-width: 520px;
-    }
+    /* ── SECTIONS ── */
+    .section { padding: 80px 0; }
+    .section-title { font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(28px, 4vw, 40px); font-weight: 500; line-height: 1.2; margin-bottom: 12px; }
+    .section-sub { color: var(--text-secondary); font-size: 17px; margin-bottom: 48px; max-width: 480px; }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
 
-    .modules-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+    /* ── BENTO ── */
+    .bento { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+    .bento-card {
+      padding: 24px; border-radius: var(--radius-lg);
+      background: var(--bg-card); border: 1px solid var(--border);
+      position: relative; overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
     }
-    .modules-grid .module-card:last-child {
-      grid-column: 2;
+    .bento-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
+    .b-8 { grid-column: span 8; } .b-4 { grid-column: span 4; }
+    .b-6 { grid-column: span 6; } .b-5 { grid-column: span 5; } .b-7 { grid-column: span 7; }
+    .b-12 { grid-column: span 12; }
+    .bento-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--brand-light); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+    .bento-title { font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; font-weight: 500; margin-bottom: 8px; }
+    .bento-desc { font-size: 14px; color: var(--text-tertiary); line-height: 1.6; }
+    .bento-mini-term { margin-top: 16px; border-radius: var(--radius-sm); background: var(--bg-deep); border: 1px solid var(--border); padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.7; }
+    .bento-stat { font-family: 'JetBrains Mono', monospace; font-size: 42px; font-weight: 600; color: var(--brand-light); line-height: 1; margin: 16px 0 6px; }
+    .bento-stat-label { font-size: 13px; color: var(--text-muted); }
+    /* Glow */
+    .bento-card::before {
+      content: ''; position: absolute; top: -60px; right: -60px;
+      width: 140px; height: 140px; border-radius: 50%;
+      background: radial-gradient(circle, var(--brand-glow) 0%, transparent 70%);
+      pointer-events: none; opacity: 0; transition: opacity 0.4s;
     }
+    .bento-card:hover::before { opacity: 1; }
+
     @media (max-width: 768px) {
-      .modules-grid { grid-template-columns: 1fr; }
-      .modules-grid .module-card:last-child { grid-column: 1; }
-    }
-    .module-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 24px;
-      transition: all 0.2s;
-    }
-    .module-card:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--border-light);
-    }
-    .module-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--brand-light);
-      margin-bottom: 8px;
-    }
-    .module-name {
-      font-family: 'Source Serif 4', Georgia, serif;
-      font-size: 20px;
-      font-weight: 500;
-      margin-bottom: 8px;
-    }
-    .module-desc {
-      font-size: 14px;
-      color: var(--text-tertiary);
-      line-height: 1.5;
-    }
-    .module-lessons {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 12px;
+      .bento { grid-template-columns: 1fr; }
+      .b-4,.b-5,.b-6,.b-7,.b-8,.b-12 { grid-column: span 1; }
     }
 
-    /* ── FEATURES ── */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 24px;
-    }
-    .feature {
-      padding: 24px;
-      border-radius: var(--radius-md);
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-    }
-    .feature-icon {
-      margin-bottom: 16px;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--brand-glow);
-      border: 1px solid rgba(201, 100, 66, 0.2);
-      border-radius: var(--radius-sm);
-    }
-    .feature-icon svg {
-      width: 20px;
-      height: 20px;
-      stroke: var(--brand-light);
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-    .feature-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    .feature-desc {
-      font-size: 14px;
-      color: var(--text-tertiary);
-      line-height: 1.5;
-    }
+    /* ── MODULES ── */
+    .modules-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .modules-grid .module-card:last-child { grid-column: 2; }
+    .module-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; transition: all 0.3s; }
+    .module-card:hover { background: var(--bg-card-hover); border-color: var(--border-light); transform: translateY(-2px); }
+    .module-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--brand-light); margin-bottom: 8px; letter-spacing: 0.5px; }
+    .module-name { font-family: 'Source Serif 4', Georgia, serif; font-size: 19px; font-weight: 500; margin-bottom: 8px; }
+    .module-desc { font-size: 13px; color: var(--text-tertiary); line-height: 1.5; }
+    .module-lessons { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); margin-top: 14px; }
+    @media (max-width: 768px) { .modules-grid { grid-template-columns: 1fr; } .modules-grid .module-card:last-child { grid-column: 1; } }
 
-    /* ── HOW IT WORKS ── */
-    .steps {
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-      max-width: 560px;
-    }
-    .step {
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-    }
-    .step-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--brand-light);
-      background: var(--brand-glow);
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .step-text h3 {
-      font-size: 16px;
-      font-weight: 500;
-      margin-bottom: 4px;
-    }
-    .step-text p {
-      font-size: 14px;
-      color: var(--text-tertiary);
-    }
+    /* ── STEPS ── */
+    .steps { display: flex; flex-direction: column; gap: 28px; max-width: 520px; }
+    .step { display: flex; gap: 18px; align-items: flex-start; }
+    .step-num { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; color: var(--brand-light); background: var(--brand-glow); border: 1px solid rgba(201,100,66,0.2); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .step-text h3 { font-size: 15px; font-weight: 500; margin-bottom: 3px; }
+    .step-text p { font-size: 14px; color: var(--text-tertiary); }
 
     /* ── CTA ── */
-    .cta-section {
-      text-align: center;
-      padding: 80px 0 100px;
-    }
-    .cta-section .section-title {
-      margin-bottom: 12px;
-    }
-    .cta-section p {
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-      font-size: 17px;
-    }
+    .cta-section { text-align: center; padding: 80px 0 100px; }
+    .cta-section .section-title { margin-bottom: 12px; }
+    .cta-section p { color: var(--text-secondary); margin-bottom: 32px; font-size: 17px; }
     .cta-install {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 18px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      padding: 16px 40px;
-      border-radius: var(--radius-md);
-      display: inline-flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: border-color 0.2s;
+      font-family: 'JetBrains Mono', monospace; font-size: 17px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      padding: 14px 36px; border-radius: var(--radius-md);
+      display: inline-flex; align-items: center; gap: 14px;
+      margin-bottom: 24px; color: var(--text-primary); cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
     }
-    .cta-install:hover { border-color: var(--brand); }
-    .cta-install .copy-icon {
-      width: 18px;
-      height: 18px;
-      stroke: var(--text-muted);
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      transition: stroke 0.2s;
-    }
-    .cta-install:hover .copy-icon { stroke: var(--brand-light); }
-    .cta-install.copied .copy-icon { stroke: var(--success); }
+    .cta-install:hover { border-color: var(--brand); transform: translateY(-1px); }
+    .cta-install svg { width: 16px; height: 16px; stroke: var(--text-muted); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.2s; }
+    .cta-install:hover svg { stroke: var(--brand-light); }
+    .cta-install.copied svg { stroke: var(--success); }
 
-    /* ── FOOTER ── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 32px 0;
-      text-align: center;
-    }
-    footer p {
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-    footer a {
-      color: var(--text-tertiary);
-      text-decoration: none;
-    }
-    footer a:hover { color: var(--brand-light); }
+    footer { border-top: 1px solid var(--border); padding: 32px 0; text-align: center; }
+    footer p { font-size: 14px; color: var(--text-muted); }
+    footer a { color: var(--text-tertiary); text-decoration: none; } footer a:hover { color: var(--brand-light); }
 
-    /* ── DIVIDER ── */
-    .divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 0;
-    }
-
-    /* ── RESPONSIVE ── */
     @media (max-width: 640px) {
       .hero { padding: 60px 0 48px; }
       .section { padding: 48px 0; }
-      .terminal-body { font-size: 12px; padding: 16px; }
       .hero-actions { flex-direction: column; align-items: center; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
   <nav>
     <div class="container">
       <a href="#" class="nav-logo">tuilder</a>
-      <a href="https://github.com/ohernandezdev/tuilder" class="nav-cta">GitHub</a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#modules">Modules</a>
+        <a href="https://github.com/ohernandezdev/tuilder" class="nav-cta">GitHub</a>
+      </div>
     </div>
   </nav>
 
@@ -428,68 +216,17 @@
     <div class="container">
       <div class="hero-badge">65 lessons &middot; 7 modules &middot; 3 languages</div>
       <h1>Learn the terminal,<br>Git &amp; <em>AI agents</em></h1>
-      <p>An interactive course in your terminal for designers, POs, CEOs &mdash; anyone who wants to collaborate with developers using AI, without being a developer.</p>
+      <p>An interactive course in your terminal for designers, POs, CEOs &mdash; anyone who wants to collaborate with developers using AI.</p>
 
-      <!-- TERMINAL DEMO -->
-      <div class="terminal">
-        <div class="terminal-bar">
-          <span class="terminal-dot red"></span>
-          <span class="terminal-dot yellow"></span>
-          <span class="terminal-dot green"></span>
-          <span class="terminal-title">Terminal</span>
-        </div>
-        <div class="terminal-body" id="term">
+      <div class="hero-terminal">
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+            <span class="terminal-title">Terminal</span>
+          </div>
+          <div class="terminal-body" id="heroTerm"></div>
         </div>
       </div>
-      <script>
-      (function(){
-        const lines = [
-          { text: '$ npx tuilder', cls: 'cmd', prompt: true, delay: 600 },
-          { text: '', cls: '', delay: 400 },
-          { text: 'tuilder', cls: 'logo', delay: 300 },
-          { text: '', cls: '', delay: 200 },
-          { text: 'Learn the terminal & work with AI agents like a pro.', cls: 'output', delay: 300 },
-          { text: '', cls: '', delay: 400 },
-          { text: '  \u25b8 Empezar curso', cls: 'selected', delay: 200 },
-          { text: '    Cambiar idioma', cls: 'dim', delay: 150 },
-          { text: '', cls: '', delay: 300 },
-          { text: '  \u2191\u2193 + Enter', cls: 'dim', delay: 0 },
-        ];
-        const term = document.getElementById('term');
-        let i = 0;
-        function addLine() {
-          if (i >= lines.length) return;
-          const l = lines[i];
-          const div = document.createElement('div');
-          if (l.cls === 'logo') {
-            div.innerHTML = '<span style="color:#d97757;font-size:20px;font-weight:bold;letter-spacing:2px">tuilder</span>';
-          } else if (l.prompt) {
-            div.innerHTML = '<span class="prompt">$</span> <span class="cmd" id="typeTarget"></span>';
-            term.appendChild(div);
-            typeText('typeTarget', 'npx tuilder', 0, () => { i++; setTimeout(addLine, lines[i]?.delay || 300); });
-            return;
-          } else if (l.cls === 'selected') {
-            div.innerHTML = '<span style="color:#d97757">' + l.text + '</span>';
-          } else if (l.cls === 'dim') {
-            div.innerHTML = '<span style="color:#5e5d59">' + l.text + '</span>';
-          } else if (l.cls) {
-            div.className = l.cls;
-            div.textContent = l.text;
-          } else {
-            div.innerHTML = '&nbsp;';
-          }
-          term.appendChild(div);
-          i++;
-          setTimeout(addLine, lines[i]?.delay || 300);
-        }
-        function typeText(id, text, idx, cb) {
-          if (idx >= text.length) { cb(); return; }
-          document.getElementById(id).textContent = text.slice(0, idx + 1);
-          setTimeout(() => typeText(id, text, idx + 1, cb), 50 + Math.random() * 40);
-        }
-        setTimeout(addLine, 800);
-      })();
-      </script>
 
       <div class="hero-actions">
         <a href="https://github.com/ohernandezdev/tuilder" class="btn-primary">Get started</a>
@@ -505,35 +242,89 @@
     <div class="container">
       <h2 class="section-title">How it works</h2>
       <p class="section-sub">One command. No installation. Your terminal becomes a classroom.</p>
-
       <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-text">
-            <h3>Open your terminal</h3>
-            <p>On Mac: Terminal or iTerm. On Windows: Windows Terminal with WSL.</p>
+        <div class="step anim-item"><div class="step-num">1</div><div class="step-text"><h3>Open your terminal</h3><p>On Mac: Terminal or iTerm. On Windows: WSL.</p></div></div>
+        <div class="step anim-item"><div class="step-num">2</div><div class="step-text"><h3>Run one command</h3><p><code style="color:var(--command)">npx tuilder</code> &mdash; that's it. No install needed.</p></div></div>
+        <div class="step anim-item"><div class="step-num">3</div><div class="step-text"><h3>Learn by doing</h3><p>Each lesson explains a concept, then asks you to practice it.</p></div></div>
+        <div class="step anim-item"><div class="step-num">4</div><div class="step-text"><h3>Graduate</h3><p>Complete 65 lessons and earn your certificate.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- FEATURES BENTO -->
+  <section class="section" id="features">
+    <div class="container">
+      <h2 class="section-title">Built for humans</h2>
+      <p class="section-sub">Not another boring tutorial. This is a game you play in your terminal.</p>
+
+      <div class="bento">
+        <!-- Interactive challenges — big card with live terminal -->
+        <div class="bento-card b-8 anim-item">
+          <div class="bento-label">Interactive</div>
+          <div class="bento-title">Practice real commands</div>
+          <div class="bento-desc">Type commands in a safe simulated terminal. Nothing you do can break anything.</div>
+          <div class="bento-mini-term" id="bentoTerm1"></div>
+        </div>
+
+        <!-- Stats -->
+        <div class="bento-card b-4 anim-item" style="display:flex;flex-direction:column;justify-content:space-between">
+          <div>
+            <div class="bento-label">Progress</div>
+            <div class="bento-stat">65</div>
+            <div class="bento-stat-label">interactive lessons</div>
+          </div>
+          <div style="margin-top:24px">
+            <div class="bento-stat" style="font-size:28px">5</div>
+            <div class="bento-stat-label">XP ranks to unlock</div>
           </div>
         </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-text">
-            <h3>Run one command</h3>
-            <p><code style="color: var(--command);">npx tuilder</code> &mdash; that's it. No install needed.</p>
+
+        <!-- AI sim — with diff preview -->
+        <div class="bento-card b-5 anim-item">
+          <div class="bento-label">AI Agents</div>
+          <div class="bento-title">Review diffs like a pro</div>
+          <div class="bento-desc">Prompt Claude Code, review changes line by line, approve or reject.</div>
+          <div class="bento-mini-term" id="bentoDiff"></div>
+        </div>
+
+        <!-- Hints + Languages + Cert -->
+        <div class="bento-card b-7 anim-item">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+            <div>
+              <div class="bento-label">Smart hints</div>
+              <div class="bento-title">Never get stuck</div>
+              <div class="bento-desc">Progressive hints: gentle nudge first, exact answer second. No shame.</div>
+            </div>
+            <div>
+              <div class="bento-label">i18n</div>
+              <div class="bento-title">3 languages</div>
+              <div class="bento-desc">English, Spanish, and French. Switch anytime from the menu.</div>
+              <div style="margin-top:12px;display:flex;gap:8px">
+                <span style="background:var(--bg-deep);border:1px solid var(--border);padding:4px 10px;border-radius:6px;font-size:12px;color:var(--text-secondary)">EN</span>
+                <span style="background:var(--bg-deep);border:1px solid var(--border);padding:4px 10px;border-radius:6px;font-size:12px;color:var(--text-secondary)">ES</span>
+                <span style="background:var(--bg-deep);border:1px solid var(--border);padding:4px 10px;border-radius:6px;font-size:12px;color:var(--text-secondary)">FR</span>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-text">
-            <h3>Learn by doing</h3>
-            <p>Each lesson explains a concept and asks you to practice it in a safe simulated environment.</p>
-          </div>
+
+        <!-- Git lesson preview -->
+        <div class="bento-card b-7 anim-item">
+          <div class="bento-label">Git workflow</div>
+          <div class="bento-title">Learn git step by step</div>
+          <div class="bento-mini-term" id="bentoGit"></div>
         </div>
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-text">
-            <h3>Graduate</h3>
-            <p>Complete all 65 lessons, earn your certificate, and start contributing to real projects.</p>
-          </div>
+
+        <!-- Certificate -->
+        <div class="bento-card b-5 anim-item" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:200px">
+          <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="var(--brand-light)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:16px">
+            <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0zM22 10v6"/>
+            <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>
+          </svg>
+          <div class="bento-title">Earn your certificate</div>
+          <div class="bento-desc" style="max-width:240px">Complete all lessons and get a terminal-rendered graduation certificate.</div>
         </div>
       </div>
     </div>
@@ -545,94 +336,15 @@
   <section class="section" id="modules">
     <div class="container">
       <h2 class="section-title">What you'll learn</h2>
-      <p class="section-sub">From "what is a terminal?" to collaborating on real projects with AI agents.</p>
-
+      <p class="section-sub">From "what is a terminal?" to collaborating on real projects with AI.</p>
       <div class="modules-grid">
-        <div class="module-card">
-          <div class="module-num">MODULE 0</div>
-          <div class="module-name">Getting Started</div>
-          <div class="module-desc">Why you're here, what the terminal is, and how to use the course controls.</div>
-          <div class="module-lessons">4 lessons</div>
-        </div>
-        <div class="module-card">
-          <div class="module-num">MODULE 1</div>
-          <div class="module-name">Terminal Basics</div>
-          <div class="module-desc">Navigate folders, read files, create directories. The essential commands.</div>
-          <div class="module-lessons">12 lessons</div>
-        </div>
-        <div class="module-card">
-          <div class="module-num">MODULE 2</div>
-          <div class="module-name">Git Fundamentals</div>
-          <div class="module-desc">Save versions of your work, create branches, and understand the git workflow.</div>
-          <div class="module-lessons">11 lessons</div>
-        </div>
-        <div class="module-card">
-          <div class="module-num">MODULE 3</div>
-          <div class="module-name">Your First AI Agent</div>
-          <div class="module-desc">Meet Claude Code. Learn to prompt, review changes, and approve or reject diffs.</div>
-          <div class="module-lessons">11 lessons</div>
-        </div>
-        <div class="module-card">
-          <div class="module-num">MODULE 4</div>
-          <div class="module-name">Your First Real Task</div>
-          <div class="module-desc">Navigate a real project, understand the code, and make changes with AI help.</div>
-          <div class="module-lessons">10 lessons</div>
-        </div>
-        <div class="module-card">
-          <div class="module-num">MODULE 5</div>
-          <div class="module-name">Team Collaboration</div>
-          <div class="module-desc">Pull requests, code review, merge conflicts, and working with your team.</div>
-          <div class="module-lessons">11 lessons</div>
-        </div>
-        <div class="module-card">
-          <div class="module-num">MODULE 6</div>
-          <div class="module-name">Graduation</div>
-          <div class="module-desc">Review everything, take the final quiz, and get your certificate.</div>
-          <div class="module-lessons">6 lessons</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider">
-
-  <!-- FEATURES -->
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title">Built for humans</h2>
-      <p class="section-sub">Not another boring tutorial. This is a game you play in your terminal.</p>
-
-      <div class="features-grid">
-        <div class="feature">
-          <div class="feature-icon"><svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
-          <div class="feature-title">Interactive challenges</div>
-          <div class="feature-desc">Type real commands in a safe simulated terminal. Nothing you do can break anything.</div>
-        </div>
-        <div class="feature">
-          <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2m16 0h2M12 14v4"/></svg></div>
-          <div class="feature-title">AI agent simulation</div>
-          <div class="feature-desc">Practice prompting AI, reviewing diffs, and approving or rejecting changes.</div>
-        </div>
-        <div class="feature">
-          <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636-.707.707M21 12h-1M4 12H3m3.343-5.657-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386z"/></svg></div>
-          <div class="feature-title">Progressive hints</div>
-          <div class="feature-desc">Stuck? Get a gentle nudge first. Still stuck? Get the exact answer. No shame.</div>
-        </div>
-        <div class="feature">
-          <div class="feature-icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
-          <div class="feature-title">XP &amp; levels</div>
-          <div class="feature-desc">Earn experience points, level up through 5 ranks, and track your daily streak.</div>
-        </div>
-        <div class="feature">
-          <div class="feature-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></svg></div>
-          <div class="feature-title">3 languages</div>
-          <div class="feature-desc">Available in English, Spanish, and French. Choose your language at the start.</div>
-        </div>
-        <div class="feature">
-          <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0zM22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg></div>
-          <div class="feature-title">Certificate</div>
-          <div class="feature-desc">Complete all 65 lessons and earn a terminal-rendered graduation certificate.</div>
-        </div>
+        <div class="module-card anim-item"><div class="module-num">MODULE 0</div><div class="module-name">Getting Started</div><div class="module-desc">Why you're here, what the terminal is, course controls.</div><div class="module-lessons">4 lessons</div></div>
+        <div class="module-card anim-item"><div class="module-num">MODULE 1</div><div class="module-name">Terminal Basics</div><div class="module-desc">Navigate folders, read files, create directories.</div><div class="module-lessons">12 lessons</div></div>
+        <div class="module-card anim-item"><div class="module-num">MODULE 2</div><div class="module-name">Git Fundamentals</div><div class="module-desc">Save versions, create branches, understand the workflow.</div><div class="module-lessons">11 lessons</div></div>
+        <div class="module-card anim-item"><div class="module-num">MODULE 3</div><div class="module-name">Your First AI Agent</div><div class="module-desc">Prompt AI, review diffs, approve or reject changes.</div><div class="module-lessons">11 lessons</div></div>
+        <div class="module-card anim-item"><div class="module-num">MODULE 4</div><div class="module-name">Your First Real Task</div><div class="module-desc">Navigate a real project and make changes with AI help.</div><div class="module-lessons">10 lessons</div></div>
+        <div class="module-card anim-item"><div class="module-num">MODULE 5</div><div class="module-name">Team Collaboration</div><div class="module-desc">Pull requests, code review, merge conflicts.</div><div class="module-lessons">11 lessons</div></div>
+        <div class="module-card anim-item"><div class="module-num">MODULE 6</div><div class="module-name">Graduation</div><div class="module-desc">Final quiz and your graduation certificate.</div><div class="module-lessons">6 lessons</div></div>
       </div>
     </div>
   </section>
@@ -644,24 +356,115 @@
     <div class="container">
       <h2 class="section-title">Ready to start?</h2>
       <p>Open your terminal and run:</p>
-      <div class="cta-install" id="ctaCopy" onclick="navigator.clipboard.writeText('npx tuilder'); this.classList.add('copied'); this.querySelector('.copy-label').textContent = 'Copied!'">
+      <div class="cta-install" onclick="navigator.clipboard.writeText('npx tuilder');this.classList.add('copied');this.querySelector('.cl').textContent='Copied!'">
         <span>npx tuilder</span>
         <span style="display:flex;align-items:center;gap:6px">
-          <svg class="copy-icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          <span class="copy-label" style="font-family:Inter,sans-serif;font-size:12px;color:var(--text-muted)">Copy</span>
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span class="cl" style="font-family:Inter,sans-serif;font-size:12px;color:var(--text-muted)">Copy</span>
         </span>
       </div>
       <br>
-      <a href="https://github.com/ohernandezdev/tuilder" class="btn-secondary" style="margin-top: 16px;">View on GitHub</a>
+      <a href="https://github.com/ohernandezdev/tuilder" class="btn-secondary" style="margin-top:16px">View on GitHub</a>
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div class="container">
-      <p>Made with care by <a href="https://github.com/ohernandezdev">Omar Hernandez</a> &middot; <a href="https://github.com/ohernandezdev/tuilder">Open Source</a> &middot; MIT License</p>
+      <p>Made by <a href="https://github.com/ohernandezdev">Omar Hernandez</a> &middot; <a href="https://github.com/ohernandezdev/tuilder">Open Source</a> &middot; MIT</p>
     </div>
   </footer>
+
+  <script>
+  // ── Hero terminal typewriter ──
+  (function(){
+    const lines = [
+      {h:'<span class="p">$</span> <span class="c" id="ht"></span>', type:'npx tuilder', d:600},
+      {h:'&nbsp;',d:300},
+      {h:'<span class="b" style="font-size:17px;font-weight:bold;letter-spacing:1px">tuilder</span>',d:250},
+      {h:'<span class="o">Learn the terminal & work with AI agents like a pro.</span>',d:250},
+      {h:'&nbsp;',d:300},
+      {h:'<span class="b">  &#9656; Start course</span>',d:150},
+      {h:'<span class="d">    Change language</span>',d:100},
+      {h:'&nbsp;',d:200},
+      {h:'<span class="d">  ↑↓ + Enter</span>',d:0},
+    ];
+    const el=document.getElementById('heroTerm');
+    let i=0;
+    function go(){
+      if(i>=lines.length)return;
+      const l=lines[i],div=document.createElement('div');
+      if(l.type){
+        div.innerHTML=l.h;el.appendChild(div);
+        let j=0;const t=document.getElementById('ht');
+        (function k(){if(j>=l.type.length){i++;setTimeout(go,lines[i]?.d||200);return}
+        t.textContent=l.type.slice(0,++j);setTimeout(k,45+Math.random()*35)})();return;
+      }
+      div.innerHTML=l.h;el.appendChild(div);i++;setTimeout(go,lines[i]?.d||200);
+    }
+    setTimeout(go,700);
+  })();
+
+  // ── Bento mini terminals — autoplay loops ──
+  function miniTerm(id,frames,speed){
+    const el=document.getElementById(id);if(!el)return;
+    let f=0;
+    function render(){
+      el.innerHTML=frames[f];f=(f+1)%frames.length;
+      setTimeout(render,speed);
+    }
+    // Start when visible
+    const obs=new IntersectionObserver(e=>{if(e[0].isIntersecting){obs.disconnect();render()}},{threshold:0.3});
+    obs.observe(el);
+  }
+
+  // Terminal basics demo
+  miniTerm('bentoTerm1',[
+    '<span class="p">$</span> <span class="c">ls</span>\n<span class="o">README.md  package.json  src/  public/</span>',
+    '<span class="p">$</span> <span class="c">ls</span>\n<span class="o">README.md  package.json  src/  public/</span>\n<span class="p">$</span> <span class="c">cd src</span>',
+    '<span class="p">~/src $</span> <span class="c">ls</span>\n<span class="o">App.tsx  index.ts  styles.css</span>',
+    '<span class="p">~/src $</span> <span class="c">cat App.tsx</span>\n<span class="o">function App() {</span>\n<span class="o">  return &lt;h1&gt;Hello&lt;/h1&gt;</span>\n<span class="o">}</span>',
+    '<span class="s">✓ Lesson complete! +15 XP</span>',
+  ],2200);
+
+  // Diff review demo
+  miniTerm('bentoDiff',[
+    '<span class="d">Claude is thinking...</span>',
+    '<span class="o">  App.tsx</span>\n<span class="e">- &lt;h1&gt;Welcome&lt;/h1&gt;</span>\n<span class="s">+ &lt;h1&gt;Welcome, {name}&lt;/h1&gt;</span>',
+    '<span class="o">  App.tsx</span>\n<span class="e">- &lt;h1&gt;Welcome&lt;/h1&gt;</span>\n<span class="s">+ &lt;h1&gt;Welcome, {name}&lt;/h1&gt;</span>\n\n<span class="b">▸ Approve</span>  <span class="d">Reject</span>',
+    '<span class="s">✓ Change approved!</span>',
+  ],2400);
+
+  // Git workflow demo
+  miniTerm('bentoGit',[
+    '<span class="p">$</span> <span class="c">git status</span>\n<span class="e">  modified: src/App.tsx</span>',
+    '<span class="p">$</span> <span class="c">git add .</span>\n<span class="p">$</span> <span class="c">git commit -m "Add greeting"</span>',
+    '<span class="s">[main a3f9c12] Add greeting</span>\n<span class="o"> 1 file changed, 2 insertions(+)</span>',
+    '<span class="p">$</span> <span class="c">git log --oneline</span>\n<span class="w">a3f9c12</span> <span class="o">Add greeting</span>\n<span class="w">b7e2d01</span> <span class="o">Initial commit</span>',
+    '<span class="s">✓ Lesson complete! +15 XP</span>',
+  ],2200);
+
+  // ── GSAP scroll animations ──
+  window.addEventListener('load',()=>{
+    if(typeof gsap==='undefined')return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Fade-up stagger for all anim-items
+    gsap.utils.toArray('.anim-item').forEach((el,i)=>{
+      gsap.from(el,{
+        y:40, opacity:0, duration:0.7,
+        ease:'power3.out',
+        scrollTrigger:{ trigger:el, start:'top 88%', once:true },
+        delay: (i%3)*0.08
+      });
+    });
+
+    // Hero parallax-lite
+    gsap.to('.hero-terminal',{
+      y:30, ease:'none',
+      scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom top', scrub:1 }
+    });
+  });
+  </script>
 
 </body>
 </html>

@@ -5,9 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>tuilder — Learn the terminal, Git &amp; AI agents</title>
   <meta name="description" content="Interactive TUI course that teaches non-tech people to use the terminal, Git, and AI coding agents — from zero.">
-  <meta property="og:title" content="tuilder — Learn the terminal, Git & AI agents">
-  <meta property="og:description" content="65 lessons. 7 modules. 3 languages. No experience needed.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="canonical" href="https://ohernandezdev.github.io/tuilder/">
+  <meta property="og:title" content="tuilder — Learn to code alongside AI agents">
+  <meta property="og:description" content="65 interactive lessons that teach non-tech people to use the terminal, Git, and AI coding agents. No experience needed.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ohernandezdev.github.io/tuilder/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="tuilder — Learn to code alongside AI agents">
+  <meta name="twitter:description" content="65 interactive lessons. Terminal, Git &amp; AI agents. No experience needed.">
+  <meta name="twitter:creator" content="@omarbastos">
+  <meta name="author" content="Omar Hernandez">
+  <meta name="keywords" content="terminal course, learn git, AI agents, Claude Code, non-technical, interactive tutorial, TUI, coding for beginners">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -223,9 +232,42 @@
     .cta-install:hover svg { stroke: var(--brand-light); }
     .cta-install.copied svg { stroke: var(--success); }
 
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(10,10,9,0.75); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); padding: 36px 32px;
+      max-width: 560px; width: 90%; position: relative;
+      transform: translateY(20px) scale(0.97); transition: transform 0.3s;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+    }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px; background: none;
+      border: none; color: var(--text-muted); font-size: 20px; cursor: pointer;
+      width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+      border-radius: 8px; transition: background 0.2s, color 0.2s;
+    }
+    .modal-close:hover { background: var(--bg-card-hover); color: var(--text-primary); }
+    .modal h3 { font-family: 'Source Serif 4', Georgia, serif; font-size: 24px; font-weight: 500; margin-bottom: 16px; }
+    .modal p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px; font-size: 15px; }
+    .modal-projects { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+    .modal-projects a { color: var(--brand-light); text-decoration: none; font-weight: 500; font-size: 15px; transition: color 0.2s; }
+    .modal-projects a:hover { color: var(--text-primary); }
+    .modal-projects a span { color: var(--text-muted); font-weight: 400; }
+    .modal-socials { display: flex; gap: 16px; margin-top: 20px; }
+    .modal-socials a { color: var(--text-tertiary); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+    .modal-socials a:hover { color: var(--brand-light); }
+
     footer { border-top: 1px solid var(--border); padding: 32px 0; text-align: center; }
     footer p { font-size: 14px; color: var(--text-muted); }
-    footer a { color: var(--text-tertiary); text-decoration: none; } footer a:hover { color: var(--brand-light); }
+    footer a { color: var(--text-tertiary); text-decoration: none; cursor: pointer; } footer a:hover { color: var(--brand-light); }
 
     @media (max-width: 640px) {
       .hero { padding: 60px 0 48px; }
@@ -242,6 +284,8 @@
       <div class="nav-links">
         <a href="#features">Features</a>
         <a href="#modules">Modules</a>
+        <a href="#" onclick="document.getElementById('aboutModal').classList.add('open');return false">About</a>
+        <a href="https://ko-fi.com/ohernandez" rel="noopener" target="_blank" style="color:var(--command);font-weight:500">Support</a>
         <a href="https://github.com/ohernandezdev/tuilder" class="nav-cta">GitHub</a>
       </div>
     </div>
@@ -476,41 +520,46 @@
         </span>
       </div>
       <br>
-      <a href="https://github.com/ohernandezdev/tuilder" class="btn-secondary" style="margin-top:16px">View on GitHub</a>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px">
+        <a href="https://github.com/ohernandezdev/tuilder" class="btn-secondary">View on GitHub</a>
+        <a href="https://ko-fi.com/ohernandez" rel="noopener" target="_blank" class="btn-secondary" style="border-color:var(--command);color:var(--command)">&#9825; Support on Ko-fi</a>
+      </div>
     </div>
   </section>
 
-  <!-- ABOUT -->
-  <section class="section" style="border-top:1px solid var(--border)">
-    <div class="container" style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap">
-      <div style="flex:1;min-width:280px">
-        <h2 class="section-title" style="margin-bottom:16px">Built by Omar Hernandez</h2>
-        <p style="color:var(--text-secondary);line-height:1.7;margin-bottom:16px">Indie developer based in Spain, originally from Venezuela. I build tools I want to use — then ship them for everyone.</p>
-        <p style="color:var(--text-tertiary);line-height:1.7;margin-bottom:20px">tuilder exists because I saw designers and POs struggling to contribute to codebases. The terminal shouldn't be a barrier — it should be a bridge.</p>
-        <p style="color:var(--text-muted);font-size:14px;font-style:italic">"Ship first, optimize later."</p>
+  <!-- ABOUT MODAL -->
+  <div class="modal-overlay" id="aboutModal" onclick="if(event.target===this)this.classList.remove('open')">
+    <div class="modal">
+      <button class="modal-close" onclick="document.getElementById('aboutModal').classList.remove('open')">&times;</button>
+      <h3>Built by Omar Hernandez</h3>
+      <p>Indie developer based in Spain, originally from Venezuela. I build tools I want to use — then ship them for everyone.</p>
+      <p>tuilder exists because I saw designers and POs struggling to contribute to codebases. The terminal shouldn't be a barrier — it should be a bridge.</p>
+      <p style="color:var(--text-muted);font-style:italic;font-size:14px">"Ship first, optimize later."</p>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:24px;margin-bottom:8px;font-family:'JetBrains Mono',monospace;letter-spacing:0.5px">OTHER PROJECTS</div>
+      <div class="modal-projects">
+        <a href="https://getklip.net" rel="noopener" target="_blank">Klip <span>— smart clipboard manager</span></a>
+        <a href="https://openkit.tools" rel="noopener" target="_blank">OpenKit <span>— open-source dev toolkit</span></a>
+        <a href="https://crimsondesert.app" rel="noopener" target="_blank">CrimsonDesert <span>— game companion app</span></a>
       </div>
-      <div style="flex:0 0 auto;display:flex;flex-direction:column;gap:12px;min-width:200px">
-        <div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;font-family:'JetBrains Mono',monospace">OTHER PROJECTS</div>
-        <a href="https://getklip.net" rel="noopener" target="_blank" style="color:var(--brand-light);text-decoration:none;font-weight:500;transition:color 0.2s">Klip <span style="color:var(--text-muted);font-weight:400">— smart clipboard manager</span></a>
-        <a href="https://openkit.tools" rel="noopener" target="_blank" style="color:var(--brand-light);text-decoration:none;font-weight:500;transition:color 0.2s">OpenKit <span style="color:var(--text-muted);font-weight:400">— open-source dev toolkit</span></a>
-        <a href="https://crimsondesert.app" rel="noopener" target="_blank" style="color:var(--brand-light);text-decoration:none;font-weight:500;transition:color 0.2s">CrimsonDesert <span style="color:var(--text-muted);font-weight:400">— game companion app</span></a>
-        <div style="margin-top:12px;display:flex;gap:16px">
-          <a href="https://x.com/omarbastos" rel="noopener" target="_blank" style="color:var(--text-tertiary);text-decoration:none;font-size:13px;transition:color 0.2s" title="X / Twitter">𝕏</a>
-          <a href="https://github.com/ohernandezdev" rel="noopener" target="_blank" style="color:var(--text-tertiary);text-decoration:none;font-size:13px;transition:color 0.2s" title="GitHub">GitHub</a>
-          <a href="https://hernandezbastos.es" rel="noopener" target="_blank" style="color:var(--text-tertiary);text-decoration:none;font-size:13px;transition:color 0.2s" title="Personal site">Blog</a>
-          <a href="https://ko-fi.com/ohernandez" rel="noopener" target="_blank" style="color:var(--text-tertiary);text-decoration:none;font-size:13px;transition:color 0.2s" title="Support on Ko-fi">Ko-fi</a>
-        </div>
+      <div class="modal-socials">
+        <a href="https://x.com/omarbastos" rel="noopener" target="_blank">𝕏 Twitter</a>
+        <a href="https://github.com/ohernandezdev" rel="noopener" target="_blank">GitHub</a>
+        <a href="https://hernandezbastos.es" rel="noopener" target="_blank">Blog</a>
+        <a href="https://ko-fi.com/ohernandez" rel="noopener" target="_blank">Ko-fi</a>
       </div>
     </div>
-  </section>
+  </div>
 
   <footer>
     <div class="container">
-      <p>Made by <a href="https://hernandezbastos.es">Omar Hernandez</a> &middot; <a href="https://github.com/ohernandezdev/tuilder">Open Source</a> &middot; MIT &middot; <a href="https://getklip.net">Klip</a> &middot; <a href="https://openkit.tools">OpenKit</a></p>
+      <p>Made by <a href="#" onclick="document.getElementById('aboutModal').classList.add('open');return false">Omar Hernandez</a> &middot; <a href="https://github.com/ohernandezdev/tuilder">Open Source</a> &middot; MIT &middot; <a href="https://getklip.net" rel="noopener" target="_blank">Klip</a> &middot; <a href="https://openkit.tools" rel="noopener" target="_blank">OpenKit</a></p>
     </div>
   </footer>
 
   <script>
+  // ── Modal close on Esc ──
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('aboutModal')?.classList.remove('open')});
+
   // ── Hero terminal typewriter ──
   (function(){
     const lines = [

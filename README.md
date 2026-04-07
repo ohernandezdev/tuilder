@@ -4,6 +4,7 @@
   <img src="https://img.shields.io/github/license/ohernandezdev/tuilder?color=87867f&style=flat-square" alt="license">
   <img src="https://img.shields.io/badge/languages-es%20%7C%20en%20%7C%20fr-d97757?style=flat-square" alt="languages">
   <img src="https://img.shields.io/badge/lessons-65-ffd580?style=flat-square" alt="lessons">
+  <a href="https://ko-fi.com/ohernandez"><img src="https://img.shields.io/badge/support-Ko--fi-ff5e5b?style=flat-square&logo=ko-fi&logoColor=white" alt="Ko-fi"></a>
 </p>
 
 <h1 align="center">

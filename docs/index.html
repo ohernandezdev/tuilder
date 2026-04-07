@@ -215,8 +215,15 @@
 
     .modules-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
+    }
+    .modules-grid .module-card:last-child {
+      grid-column: 2;
+    }
+    @media (max-width: 768px) {
+      .modules-grid { grid-template-columns: 1fr; }
+      .modules-grid .module-card:last-child { grid-column: 1; }
     }
     .module-card {
       background: var(--bg-card);
@@ -266,8 +273,24 @@
       border: 1px solid var(--border);
     }
     .feature-icon {
-      font-size: 28px;
       margin-bottom: 16px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--brand-glow);
+      border: 1px solid rgba(201, 100, 66, 0.2);
+      border-radius: var(--radius-sm);
+    }
+    .feature-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--brand-light);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
     .feature-title {
       font-size: 16px;
@@ -334,25 +357,29 @@
       font-size: 18px;
       background: var(--bg-surface);
       border: 1px solid var(--border);
-      padding: 16px 32px;
+      padding: 16px 40px;
       border-radius: var(--radius-md);
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
       margin-bottom: 24px;
       color: var(--text-primary);
       cursor: pointer;
       transition: border-color 0.2s;
-      position: relative;
     }
     .cta-install:hover { border-color: var(--brand); }
-    .cta-install .copy-hint {
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      color: var(--text-muted);
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
+    .cta-install .copy-icon {
+      width: 18px;
+      height: 18px;
+      stroke: var(--text-muted);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke 0.2s;
     }
+    .cta-install:hover .copy-icon { stroke: var(--brand-light); }
+    .cta-install.copied .copy-icon { stroke: var(--success); }
 
     /* ── FOOTER ── */
     footer {
@@ -411,18 +438,58 @@
           <span class="terminal-dot green"></span>
           <span class="terminal-title">Terminal</span>
         </div>
-        <div class="terminal-body">
-          <div><span class="prompt">$</span> <span class="cmd">npx tuilder</span></div>
-          <div>&nbsp;</div>
-          <div><span class="brand">  _         _ _     _</span></div>
-          <div><span class="brand"> | |_ _   _(_) | __| | ___ _ __</span></div>
-          <div><span class="brand"> | __| | | | | |/ _` |/ _ \ '__|</span></div>
-          <div><span class="brand"> | |_| |_| | | | (_| |  __/ |</span></div>
-          <div><span class="brand">  \__|\__,_|_|_|\__,_|\___|_|</span></div>
-          <div>&nbsp;</div>
-          <div><span class="output">Learn the terminal &amp; work with AI agents like a pro.</span></div>
+        <div class="terminal-body" id="term">
         </div>
       </div>
+      <script>
+      (function(){
+        const lines = [
+          { text: '$ npx tuilder', cls: 'cmd', prompt: true, delay: 600 },
+          { text: '', cls: '', delay: 400 },
+          { text: 'tuilder', cls: 'logo', delay: 300 },
+          { text: '', cls: '', delay: 200 },
+          { text: 'Learn the terminal & work with AI agents like a pro.', cls: 'output', delay: 300 },
+          { text: '', cls: '', delay: 400 },
+          { text: '  \u25b8 Empezar curso', cls: 'selected', delay: 200 },
+          { text: '    Cambiar idioma', cls: 'dim', delay: 150 },
+          { text: '', cls: '', delay: 300 },
+          { text: '  \u2191\u2193 + Enter', cls: 'dim', delay: 0 },
+        ];
+        const term = document.getElementById('term');
+        let i = 0;
+        function addLine() {
+          if (i >= lines.length) return;
+          const l = lines[i];
+          const div = document.createElement('div');
+          if (l.cls === 'logo') {
+            div.innerHTML = '<span style="color:#d97757;font-size:20px;font-weight:bold;letter-spacing:2px">tuilder</span>';
+          } else if (l.prompt) {
+            div.innerHTML = '<span class="prompt">$</span> <span class="cmd" id="typeTarget"></span>';
+            term.appendChild(div);
+            typeText('typeTarget', 'npx tuilder', 0, () => { i++; setTimeout(addLine, lines[i]?.delay || 300); });
+            return;
+          } else if (l.cls === 'selected') {
+            div.innerHTML = '<span style="color:#d97757">' + l.text + '</span>';
+          } else if (l.cls === 'dim') {
+            div.innerHTML = '<span style="color:#5e5d59">' + l.text + '</span>';
+          } else if (l.cls) {
+            div.className = l.cls;
+            div.textContent = l.text;
+          } else {
+            div.innerHTML = '&nbsp;';
+          }
+          term.appendChild(div);
+          i++;
+          setTimeout(addLine, lines[i]?.delay || 300);
+        }
+        function typeText(id, text, idx, cb) {
+          if (idx >= text.length) { cb(); return; }
+          document.getElementById(id).textContent = text.slice(0, idx + 1);
+          setTimeout(() => typeText(id, text, idx + 1, cb), 50 + Math.random() * 40);
+        }
+        setTimeout(addLine, 800);
+      })();
+      </script>
 
       <div class="hero-actions">
         <a href="https://github.com/ohernandezdev/tuilder" class="btn-primary">Get started</a>
@@ -537,32 +604,32 @@
 
       <div class="features-grid">
         <div class="feature">
-          <div class="feature-icon">🎮</div>
+          <div class="feature-icon"><svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
           <div class="feature-title">Interactive challenges</div>
           <div class="feature-desc">Type real commands in a safe simulated terminal. Nothing you do can break anything.</div>
         </div>
         <div class="feature">
-          <div class="feature-icon">🤖</div>
+          <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2m16 0h2M12 14v4"/></svg></div>
           <div class="feature-title">AI agent simulation</div>
           <div class="feature-desc">Practice prompting AI, reviewing diffs, and approving or rejecting changes.</div>
         </div>
         <div class="feature">
-          <div class="feature-icon">💡</div>
+          <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636-.707.707M21 12h-1M4 12H3m3.343-5.657-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386z"/></svg></div>
           <div class="feature-title">Progressive hints</div>
           <div class="feature-desc">Stuck? Get a gentle nudge first. Still stuck? Get the exact answer. No shame.</div>
         </div>
         <div class="feature">
-          <div class="feature-icon">⭐</div>
+          <div class="feature-icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
           <div class="feature-title">XP &amp; levels</div>
           <div class="feature-desc">Earn experience points, level up through 5 ranks, and track your daily streak.</div>
         </div>
         <div class="feature">
-          <div class="feature-icon">🌍</div>
+          <div class="feature-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></svg></div>
           <div class="feature-title">3 languages</div>
           <div class="feature-desc">Available in English, Spanish, and French. Choose your language at the start.</div>
         </div>
         <div class="feature">
-          <div class="feature-icon">🎓</div>
+          <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0zM22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg></div>
           <div class="feature-title">Certificate</div>
           <div class="feature-desc">Complete all 65 lessons and earn a terminal-rendered graduation certificate.</div>
         </div>
@@ -577,9 +644,12 @@
     <div class="container">
       <h2 class="section-title">Ready to start?</h2>
       <p>Open your terminal and run:</p>
-      <div class="cta-install" onclick="navigator.clipboard.writeText('npx tuilder'); this.querySelector('.copy-hint').textContent = 'Copied!'">
-        npx tuilder
-        <span class="copy-hint">click to copy</span>
+      <div class="cta-install" id="ctaCopy" onclick="navigator.clipboard.writeText('npx tuilder'); this.classList.add('copied'); this.querySelector('.copy-label').textContent = 'Copied!'">
+        <span>npx tuilder</span>
+        <span style="display:flex;align-items:center;gap:6px">
+          <svg class="copy-icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span class="copy-label" style="font-family:Inter,sans-serif;font-size:12px;color:var(--text-muted)">Copy</span>
+        </span>
       </div>
       <br>
       <a href="https://github.com/ohernandezdev/tuilder" class="btn-secondary" style="margin-top: 16px;">View on GitHub</a>
